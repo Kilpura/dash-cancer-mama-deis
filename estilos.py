@@ -272,8 +272,21 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {{
 }}
 
 /* Ocultar circulo de radio button en todos los selectores de navegacion */
-div[role="radiogroup"] label > div:first-child {{
+div[role="radiogroup"] label > div:first-child,
+div[role="radiogroup"] label > span:first-child {{
     display: none !important;
+}}
+
+div[role="radiogroup"] input[type="radio"] {{
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
 }}
 
 /* Menu lateral izquierdo (Sidebar vertical) */
@@ -282,7 +295,8 @@ section[data-testid="stSidebar"] {{
     border-right: 1px solid {estilo["color_borde_tarjetas"]} !important;
 }}
 
-section[data-testid="stSidebar"][aria-expanded="true"] {{
+section[data-testid="stSidebar"][aria-expanded="true"],
+section[data-testid="stSidebar"][data-collapsed="false"] {{
     width: {estilo["ancho_menu_lateral"]} !important;
     min-width: {estilo["ancho_menu_lateral"]} !important;
     max-width: {estilo["ancho_menu_lateral"]} !important;
