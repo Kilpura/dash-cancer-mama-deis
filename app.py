@@ -10,7 +10,7 @@ importlib.reload(funciones)
 importlib.reload(vistas)
 
 st.set_page_config(
-    page_title="Presentacion DEIS-REM - Cancer de Mama",
+    page_title="Presentación DEIS-REM - Cáncer de Mama",
     page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -35,7 +35,7 @@ with st.sidebar:
     opciones_menu = [
         "Tablas",
         "Exploración",
-        "Analisis e Impacto",
+        "Análisis e Impacto",
     ]
 
     seccion_seleccionada = st.radio(
@@ -50,7 +50,7 @@ st.markdown(
     <div style="display: flex; justify-content: space-between; align-items: left; margin-bottom: 3px; flex-wrap: wrap; gap: 12px;">
         <div>
             <div style="font-size: 20px; font-weight: 600; letter-spacing: 0.04em; color: #6D7B8C; line-height: 1.15; margin-bottom: 30px;">
-                Exploracion y Analisis con Datos DEIS-REM
+                Exploración y Análisis con Datos DEIS-REM
             </div>
         </div>
     </div>
@@ -63,5 +63,5 @@ if seccion_seleccionada == "Tablas":
     vistas.renderizar_pestana_tablas()
 elif seccion_seleccionada == "Exploración":
     vistas.renderizar_pestana_busqueda()
-elif seccion_seleccionada == "Analisis e Impacto":
+elif seccion_seleccionada == "Análisis e Impacto":
     vistas.renderizar_pestana_analisis_mama()

@@ -42,7 +42,7 @@ def renderizar_pestana_tablas():
         "Seleccione la tabla a explorar",
         [
             "Hechos",
-            "Codigos",
+            "Códigos",
             "Prestaciones",
             "Columnas",
             "Establecimientos",
@@ -73,7 +73,7 @@ def renderizar_pestana_tablas():
             en_columnas=True,
         )
 
-    elif tabla_seleccionada == "Codigos":
+    elif tabla_seleccionada == "Códigos":
         with st.container(border=False):
             st.subheader("Tabla de Códigos")
             mostrar_tabla_configurable(obtener_esquema_codigos())
@@ -209,13 +209,13 @@ def renderizar_pestana_tablas():
 
 
 def renderizar_pestana_busqueda():
-    st.header("Metodologia de Busqueda en el Catalogo Clinico")
+    st.header("Metodología de Búsqueda en el Catálogo Clínico")
 
     st.markdown(
         """
         <div class="tarjeta-bento tarjeta-superficie">
             <div style="margin-bottom: 12px;">
-                <span class="pildora pildora-rosa">Cancer de Mama 2015 - 2025</span>
+                <span class="pildora pildora-rosa">Cáncer de Mama 2015 - 2025</span>
                 <span class="pildora pildora-blanca">Alerta Sanitaria 2020</span>
             </div>
             <h3 style="margin-top: 0; margin-bottom: 10px;">Contexto e Impacto de las Restricciones Sanitarias de 2020</h3>
@@ -230,7 +230,7 @@ def renderizar_pestana_busqueda():
         unsafe_allow_html=True,
     )
 
-    st.subheader("Ruta Clinica del Cancer de Mama en Chile")
+    st.subheader("Ruta Clínica del Cáncer de Mama en Chile")
 
     st.markdown(
         """
@@ -238,7 +238,7 @@ def renderizar_pestana_busqueda():
         <div class="tarjeta-bento tarjeta-superficie">
             <div style="margin-bottom: 0px;">
             </div>
-            <h3 style="margin-top: 0; margin-bottom: 5px;">Tamizaje y Pesquisa Precoz en Atencion Primaria</h3>
+            <h3 style="margin-top: 0; margin-bottom: 5px;">Tamizaje y Pesquisa Precoz en Atención Primaria</h3>
             <p>
                 <strong>Chequeos preventivos en consultorios y CESFAM:</strong>
                 Mamografía preventiva gratuita para mujeres de 50 a 69 años, orientada a detectar lesiones antes de que presenten síntomas. Desde 2023 (Ley 21.551) se puede realizar sin necesidad de orden médica previa.
@@ -248,7 +248,7 @@ def renderizar_pestana_busqueda():
         <div class="tarjeta-bento tarjeta-blanca">
             <div style="margin-bottom: 0px;">
             </div>
-            <h3 style="margin-top: 0; margin-bottom: 14px;">Clasificacion Radiologica BI-RADS</h3>
+            <h3 style="margin-top: 0; margin-bottom: 14px;">Clasificación Radiológica BI-RADS</h3>
             <div class="fila-item-bento">
                 <div><strong>BI-RADS 0</strong> — Estudio incompleto </div>
                 <span class="pildora pildora-suave">Complementar</span>
@@ -274,10 +274,10 @@ def renderizar_pestana_busqueda():
         <div class="tarjeta-bento tarjeta-rosa-alerta">
             <div style="margin-bottom: 0px;">
             </div>
-            <h3 style="margin-top: 0; margin-bottom: 10px;">Confirmacion Diagnostica y Etapificacion</h3>
+            <h3 style="margin-top: 0; margin-bottom: 10px;">Confirmación Diagnóstica y Etapificación</h3>
             <p style="margin-bottom: 0;">
-                Ante un resultado <strong>BI-RADS 4 o 5</strong> o sospecha en examen fisico, la paciente ingresa a la Unidad de Patologia Mamaria hospitalaria.
-                Contempla ecotomografia complementaria, confirmacion histologica mediante biopsia core o estereotaxica (<code>Hoja B</code> y etapificacion.
+                Ante un resultado <strong>BI-RADS 4 o 5</strong> o sospecha en examen físico, la paciente ingresa a la Unidad de Patología Mamaria hospitalaria.
+                Contempla ecotomografía complementaria, confirmación histológica mediante biopsia core o estereotáxica (<code>Hoja B</code>) y etapificación.
             </p>
         </div>
 
@@ -286,8 +286,8 @@ def renderizar_pestana_busqueda():
             </div>
             <h3 style="margin-top: 0; margin-bottom: 10px;">Tratamiento y Seguimiento</h3>
             <ul style="margin-bottom: 0;">
-                <li><strong>Estadio temprano:</strong> Mastectomia parcial o conservadora (<code>Hoja B</code>, codigo <code>01012162</code>).</li>
-                <li><strong>Estadio tardio:</strong> Mastectomia radical con vaciamiento axilar (<code>Hoja B</code>, codigo <code>01012163</code>).</li>
+                <li><strong>Estadio temprano:</strong> Mastectomía parcial o conservadora (<code>Hoja B</code>, código <code>01012162</code>).</li>
+                <li><strong>Estadio tardío:</strong> Mastectomía radical con vaciamiento axilar (<code>Hoja B</code>, código <code>01012163</code>).</li>
             </ul>
         </div>
         </div>
@@ -322,7 +322,7 @@ display(catalogo_mamografias)"""
     mostrar_bloque_codigo_y_tabla(
         titulo_bloque="Exploración del catálogo mediante palabras claves por año",
         descripcion_bloque=(
-            "Se busca directamente en el catálogo mediante palabras claves como **mamografia**, **bilateral**, **unilateral** y **birads** "
+            "Se busca directamente en el catálogo mediante palabras claves como **mamografía**, **bilateral**, **unilateral** y **birads** "
             "a través de los años (2015 a 2025), obteniendo el rango de vigencia de cada prestación:"
         ),
         codigo_ejemplo=codigo_busqueda_antiguos,
@@ -331,21 +331,21 @@ display(catalogo_mamografias)"""
     )
 
     with st.container(border=False):
-        st.subheader("Sintesis de Hojas REM que Registran Mamografias y Cirugia Mamaria")
+        st.subheader("Síntesis de Hojas REM que Registran Mamografías y Cirugía Mamaria")
         st.markdown(
-            "A partir de la exploracion del diccionario entre 2015 y 2025, se identifican las hojas clave del sistema DEIS-REM para el estudio de cancer de mama:"
+            "A partir de la exploración del diccionario entre 2015 y 2025, se identifican las hojas clave del sistema DEIS-REM para el estudio de cáncer de mama:"
         )
         mostrar_tabla_configurable(obtener_resumen_hojas_mamografia())
 
 
 def renderizar_pestana_analisis_mama():
-    st.header("Retraso Diagnostico y Quirurgico (2015 - 2025)")
+    st.header("Retraso Diagnóstico y Quirúrgico (2015 - 2025)")
 
     tabla_mensual_mama, tabla_anual_mama = cargar_datos_cancer_mama()
     tabla_anual_vista = tabla_anual_mama.round(0).astype(int).reset_index()
 
     with st.container(border=False):
-        st.subheader("Consolidacion Historica de Prestaciones Oncomamarias (2015 - 2025)")
+        st.subheader("Consolidación Histórica de Prestaciones Oncomamarias (2015 - 2025)")
         mostrar_tabla_configurable(tabla_anual_vista, tipo_tabla="consolidacion")
 
     tamizaje_2024 = int(tabla_anual_mama.loc[2024, "mamografia_informada_aps"])
@@ -375,9 +375,9 @@ def renderizar_pestana_analisis_mama():
 
     if tabla_mensual_mama is not None:
         mostrar_bloque_grafico(
-            titulo_grafico="Colapso del Tamizaje Preventivo en Cuarentenas (2020) y Evolucion Reciente (2025)",
+            titulo_grafico="Colapso del Tamizaje Preventivo en Cuarentenas (2020) y Evolución Reciente (2025)",
             descripcion_previa=(
-                f"Las mamografias informadas en APS cayeron a su minimo historico con {texto_minimo_abril} examenes en abril de 2020, tomando mas de 18 meses recuperar el nivel prepandemia. "
+                f"Las mamografías informadas en APS cayeron a su mínimo histórico con {texto_minimo_abril} exámenes en abril de 2020, tomando más de 18 meses recuperar el nivel prepandemia. "
                 f"Al extender la serie hasta **2025**, el registro en hoja A29 pasa de **{texto_tamizaje_2024}** en 2024 a **{texto_tamizaje_2025}** en 2025. "
             ),
             figura_plotly=crear_grafico_tamizaje_mensual(tabla_mensual_mama),
@@ -387,26 +387,26 @@ def renderizar_pestana_analisis_mama():
 
     with columna_graf_birads:
         mostrar_bloque_grafico(
-            titulo_grafico="Deteccion de Hallazgos Sospechosos (BIRADS 4, 5 y 6)",
+            titulo_grafico="Detección de Hallazgos Sospechosos (BIRADS 4, 5 y 6)",
             descripcion_previa=(
-                f"La caida de tamizaje en 2020 genero un subdiagnostico inicial (1.581 casos), seguido de una ola acumulada que alcanzo **4.277** casos en 2023 y **{texto_birads_2024}** en 2024 (mas del doble que 2019)."
+                f"La caída de tamizaje en 2020 generó un subdiagnóstico inicial (1.581 casos), seguido de una ola acumulada que alcanzó **4.277** casos en 2023 y **{texto_birads_2024}** en 2024 (más del doble que 2019)."
             ),
             figura_plotly=crear_grafico_birads_anual(tabla_anual_mama),
         )
 
     with columna_graf_cirugia:
         mostrar_bloque_grafico(
-            titulo_grafico="Evolucion Quirurgica",
+            titulo_grafico="Evolución Quirúrgica",
             descripcion_previa=(
-                f"Las mastectomias radicales con vaciamiento axilar alcanzaron su pico en **2023** (3.398 cirugias) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las cirugias parciales conservadoras crecen hasta un nuevo maximo historico en **2025** ({texto_parciales_2025} intervenciones)."
+                f"Las mastectomías radicales con vaciamiento axilar alcanzaron su pico en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las cirugías parciales conservadoras crecen hasta un nuevo máximo histórico en **2025** ({texto_parciales_2025} intervenciones)."
             ),
             figura_plotly=crear_grafico_mastectomias_anual(tabla_anual_mama),
         )
 
     mostrar_bloque_grafico(
-        titulo_grafico="Comparacion Estandarizada de la Ruta Clinica (Indice Base 2019 = 100)",
+        titulo_grafico="Comparación Estandarizada de la Ruta Clínica (Índice Base 2019 = 100)",
         descripcion_previa=(
-            "Normalizar cada etapa por su nivel de **2019 (= 100)** permite comparar en una misma escala. En **2020**, el tamizaje APS y las bilaterales cayeron cerca de **55 puntos**, mientras las cirugias descendieron menos (**75** parciales y **80** radicales) por priorizacion oncologica. Hacia **2024**, BI-RADS 4-5-6 llego a **207 puntos** y en **2025** las bilaterales totales (167) y parciales (133) marcan nuevos maximos relativos."
+            "Normalizar cada etapa por su nivel de **2019 (= 100)** permite comparar en una misma escala. En **2020**, el tamizaje APS y las bilaterales cayeron cerca de **55 puntos**, mientras las cirugías descendieron menos (**75** parciales y **80** radicales) por priorización oncológica. Hacia **2024**, BI-RADS 4-5-6 llegó a **207 puntos** y en **2025** las bilaterales totales (167) y parciales (133) marcan nuevos máximos relativos."
         ),
         figura_plotly=crear_grafico_indice_ruta_clinica(tabla_anual_mama),
     )
@@ -415,18 +415,18 @@ def renderizar_pestana_analisis_mama():
 
     with columna_graf_tasa:
         mostrar_bloque_grafico(
-            titulo_grafico="Tasa de Sospecha por 1.000 Mamografias Informadas",
+            titulo_grafico="Tasa de Sospecha por 1.000 Mamografías Informadas",
             descripcion_previa=(
-                "Para aislar la carga de sospecha maligna sobre la poblacion efectivamente tamizada, se calcula la tasa por **1.000 informadas** dentro de la misma hoja A29. Previo a la pandemia oscilaba entre **5,6 y 6,3 por mil**, mientras entre **2020 y 2025** permanece elevada entre **7,0 y 7,3 por mil**."
+                "Para aislar la carga de sospecha maligna sobre la población efectivamente tamizada, se calcula la tasa por **1.000 informadas** dentro de la misma hoja A29. Previo a la pandemia oscilaba entre **5,6 y 6,3 por mil**, mientras entre **2020 y 2025** permanece elevada entre **7,0 y 7,3 por mil**."
             ),
             figura_plotly=crear_grafico_tasa_sospecha_birads(tabla_anual_mama),
         )
 
     with columna_graf_proporcion:
         mostrar_bloque_grafico(
-            titulo_grafico="Evolucion de Mastectomias Radicales y Parciales",
+            titulo_grafico="Evolución de Mastectomías Radicales y Parciales",
             descripcion_previa=(
-                f"Comparacion directa de la trayectoria anual en numero de cirugias. Las parciales mantienen un crecimiento sostenido desde **2.591 (2015)** hasta **{texto_parciales_2025} en 2025**, mientras las mastectomias radicales alcanzaron su maximo en **2023 (3.398)** y se mantienen en **2024 (3.257)** y **2025 ({texto_radicales_2025})**."
+                f"Comparación directa de la trayectoria anual en número de cirugías. Las parciales mantienen un crecimiento sostenido desde **2.591 (2015)** hasta **{texto_parciales_2025} en 2025**, mientras las mastectomías radicales alcanzaron su máximo en **2023 (3.398)** y se mantienen en **2024 (3.257)** y **2025 ({texto_radicales_2025})**."
             ),
             figura_plotly=crear_grafico_mastectomias_lineas(tabla_anual_mama),
         )
@@ -434,12 +434,12 @@ def renderizar_pestana_analisis_mama():
     resumen_anual_emp = cargar_datos_tamizaje_emp_50_59()
 
     mostrar_bloque_grafico(
-        titulo_grafico="Tamizaje Preventivo en Poblacion Objetivo del EMP: Mujeres de 50 a 59 Años (2015 - 2025)",
+        titulo_grafico="Tamizaje Preventivo en Población Objetivo del EMP: Mujeres de 50 a 59 Años (2015 - 2025)",
         descripcion_previa=(
-            "El **Examen de Medicina Preventiva (EMP)** garantiza mamografia gratuita para mujeres entre **50 y 59 años**, "
-            "tramo medido de manera estable desde 2015 hasta 2025 mediante las columnas **col04 (50-54 anios)** y **col05 (55-59 anios)** de BM18, BS17 y A29. "
+            "El **Examen de Medicina Preventiva (EMP)** garantiza mamografía gratuita para mujeres entre **50 y 59 años**, "
+            "tramo medido de manera estable desde 2015 hasta 2025 mediante las columnas **col04 (50-54 años)** y **col05 (55-59 años)** de BM18, BS17 y A29. "
             "Este grupo cayó de 171.426 en 2019 a 92.194 en 2020. "
-            "En 2023 por la **Ley N° 21.551** elimina la orden medica, alcanzando un maximo historico de **249.663 examenes en 2024** "
+            "En 2023 por la **Ley N° 21.551** elimina la orden médica, alcanzando un máximo histórico de **249.663 exámenes en 2024** "
             "(210.371 en 2025 por el subregistro parcial en seis Servicios de Salud)."
         ),
         figura_plotly=crear_grafico_tamizaje_emp_50_59(resumen_anual_emp),

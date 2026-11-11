@@ -127,7 +127,7 @@ def mostrar_bloque_codigo_y_tabla(
                 st.caption("Vista de la tabla resultante")
                 mostrar_tabla_configurable(tabla_resultado)
         else:
-            st.caption("Codigo de consulta")
+            st.caption("Código de consulta")
             st.code(codigo_ejemplo, language=lenguaje_codigo)
             st.caption("Vista de la tabla resultante")
             mostrar_tabla_configurable(tabla_resultado)
@@ -183,17 +183,17 @@ def obtener_esquema_hechos():
         {
             "columna": "cod_prestacion",
             "tipo_dato": "string",
-            "descripcion": "Codigo de la prestacion o actividad clinica registrada",
+            "descripcion": "Código de la prestación o actividad clínica registrada",
         },
         {
             "columna": "cod_col_numerica",
             "tipo_dato": "string",
-            "descripcion": "Codigo de la columna numerica dentro de la hoja (ej: col01 para total)",
+            "descripcion": "Código de la columna numérica dentro de la hoja (ej: col01 para total)",
         },
         {
             "columna": "cantidad",
             "tipo_dato": "double",
-            "descripcion": "Valor numerico reportado para el establecimiento, prestacion y columna",
+            "descripcion": "Valor numérico reportado para el establecimiento, prestación y columna",
         },
     ])
 
@@ -203,7 +203,7 @@ def obtener_esquema_codigos():
         {
             "columna": "year",
             "tipo_dato": "bigint",
-            "descripcion": "Anio de vigencia del diccionario REM",
+            "descripcion": "Año de vigencia del diccionario REM",
         },
         {
             "columna": "tipo_serie",
@@ -213,37 +213,37 @@ def obtener_esquema_codigos():
         {
             "columna": "cod_hoja",
             "tipo_dato": "string",
-            "descripcion": "Codigo identificador de la hoja REM (ej: a04, a29, b, bm18a)",
+            "descripcion": "Código identificador de la hoja REM (ej: a04, a29, b, bm18a)",
         },
         {
             "columna": "nombre_hoja",
             "tipo_dato": "string",
-            "descripcion": "Nombre descriptivo de la hoja clinica",
+            "descripcion": "Nombre descriptivo de la hoja clínica",
         },
         {
             "columna": "nombre_seccion",
             "tipo_dato": "string",
-            "descripcion": "Nombre de la seccion clinica dentro de la hoja",
+            "descripcion": "Nombre de la sección clínica dentro de la hoja",
         },
         {
             "columna": "cod_prestacion",
             "tipo_dato": "string",
-            "descripcion": "Codigo de la prestacion (llave para cruzar con la tabla hechos)",
+            "descripcion": "Código de la prestación (llave para cruzar con la tabla hechos)",
         },
         {
             "columna": "nombre_prestacion",
             "tipo_dato": "string",
-            "descripcion": "Glosa clinica descriptiva de la fila o actividad registrada",
+            "descripcion": "Glosa clínica descriptiva de la fila o actividad registrada",
         },
         {
             "columna": "cod_col_numerica",
             "tipo_dato": "string",
-            "descripcion": "Codigo de la columna numerica (col01, col02, etc., llave para cruzar con hechos)",
+            "descripcion": "Código de la columna numérica (col01, col02, etc., llave para cruzar con hechos)",
         },
         {
             "columna": "nombre_col_numerica",
             "tipo_dato": "string",
-            "descripcion": "Descripcion de lo que mide esa columna (ej: total ambos sexos, sexo o tramo etario)",
+            "descripcion": "Descripción de lo que mide esa columna (ej: total ambos sexos, sexo o tramo etario)",
         },
     ])
 
@@ -307,7 +307,7 @@ def obtener_esquema_jerarquia_prestaciones():
         {
             "columna": "num_prestacion",
             "tipo_dato": "int",
-            "descripcion": "Clave numerica del nodo en el arbol de glosas de las prestaciones (cruza con codigos)",
+            "descripcion": "Clave numérica del nodo en el árbol de glosas de las prestaciones (cruza con códigos)",
         },
         {
             "columna": "clave",
@@ -322,17 +322,17 @@ def obtener_esquema_jerarquia_prestaciones():
         {
             "columna": "nivel",
             "tipo_dato": "bigint",
-            "descripcion": "Profundidad del nodo en el arbol jerarquico de glosas, comenzando desde 1",
+            "descripcion": "Profundidad del nodo en el árbol jerárquico de glosas, comenzando desde 1",
         },
         {
             "columna": "num_prestacion_padre",
             "tipo_dato": "int",
-            "descripcion": "Clave del nodo padre en el mismo arbol (es nulo cuando el nodo esta en la raiz)",
+            "descripcion": "Clave del nodo padre en el mismo árbol (es nulo cuando el nodo está en la raíz)",
         },
         {
             "columna": "unidad",
             "tipo_dato": "string",
-            "descripcion": "Unidad extraida del valor (meses o anios); es nula cuando la glosa no la indica",
+            "descripcion": "Unidad extraída del valor (meses o años); es nula cuando la glosa no la indica",
         },
     ])
 
@@ -351,7 +351,7 @@ def obtener_esquema_jerarquia_columnas():
         {
             "columna": "num_col_numerica",
             "tipo_dato": "int",
-            "descripcion": "Clave numerica del nodo en el arbol de glosas de las columnas numericas (cruza con codigos)",
+            "descripcion": "Clave numérica del nodo en el árbol de glosas de las columnas numéricas (cruza con códigos)",
         },
         {
             "columna": "clave",
@@ -366,17 +366,17 @@ def obtener_esquema_jerarquia_columnas():
         {
             "columna": "nivel",
             "tipo_dato": "bigint",
-            "descripcion": "Profundidad del nodo en el arbol de glosas de columnas, comenzando desde 1",
+            "descripcion": "Profundidad del nodo en el árbol de glosas de columnas, comenzando desde 1",
         },
         {
             "columna": "num_col_numerica_padre",
             "tipo_dato": "int",
-            "descripcion": "Clave del nodo padre en el mismo arbol (es nulo en la raiz)",
+            "descripcion": "Clave del nodo padre en el mismo árbol (es nulo en la raíz)",
         },
         {
             "columna": "unidad",
             "tipo_dato": "string",
-            "descripcion": "Unidad extraida del valor; es nula cuando la glosa no indica unidad",
+            "descripcion": "Unidad extraída del valor; es nula cuando la glosa no indica unidad",
         },
     ])
 
@@ -395,17 +395,17 @@ def obtener_esquema_establecimientos():
         {
             "columna": "id_establecimiento",
             "tipo_dato": "string",
-            "descripcion": "Codigo vigente del establecimiento de salud asignado por DEIS (unico en esta tabla)",
+            "descripcion": "Código vigente del establecimiento de salud asignado por DEIS (único en esta tabla)",
         },
         {
             "columna": "year_ultimo_cambio",
             "tipo_dato": "int",
-            "descripcion": "Anio de la edicion anual mas reciente del registro de establecimientos de la que provienen los datos",
+            "descripcion": "Año de la edición anual más reciente del registro de establecimientos de la que provienen los datos",
         },
         {
             "columna": "nombre_establecimiento",
             "tipo_dato": "string",
-            "descripcion": "Nombre oficial del establecimiento normalizado en minusculas y sin tildes",
+            "descripcion": "Nombre oficial del establecimiento normalizado en minúsculas y sin tildes",
         },
         {
             "columna": "tipo_establecimiento",
@@ -420,7 +420,7 @@ def obtener_esquema_establecimientos():
         {
             "columna": "nivel_atencion",
             "tipo_dato": "string",
-            "descripcion": "Nivel de atencion del establecimiento: primario, secundario o terciario",
+            "descripcion": "Nivel de atención del establecimiento: primario, secundario o terciario",
         },
         {
             "columna": "nivel_complejidad",
@@ -430,7 +430,7 @@ def obtener_esquema_establecimientos():
         {
             "columna": "nombre_region",
             "tipo_dato": "string",
-            "descripcion": "Nombre de la region en que se ubica el establecimiento",
+            "descripcion": "Nombre de la región en que se ubica el establecimiento",
         },
         {
             "columna": "nombre_comuna",
@@ -440,7 +440,7 @@ def obtener_esquema_establecimientos():
         {
             "columna": "cod_comuna",
             "tipo_dato": "string",
-            "descripcion": "Codigo oficial de la comuna (CUT) de cinco digitos actualizado",
+            "descripcion": "Código oficial de la comuna (CUT) de cinco dígitos actualizado",
         },
         {
             "columna": "nombre_servicio_salud",
@@ -500,17 +500,17 @@ def obtener_esquema_establecimientos_historial():
         {
             "columna": "id_establecimiento",
             "tipo_dato": "string",
-            "descripcion": "Codigo vigente del establecimiento al que corresponde el valor historico (cruza con establecimientos)",
+            "descripcion": "Código vigente del establecimiento al que corresponde el valor histórico (cruza con establecimientos)",
         },
         {
             "columna": "nombre_columna",
             "tipo_dato": "string",
-            "descripcion": "Nombre del atributo de la tabla de establecimientos que cambio, o id_establecimiento_antiguo",
+            "descripcion": "Nombre del atributo de la tabla de establecimientos que cambió, o id_establecimiento_antiguo",
         },
         {
             "columna": "valor_columna",
             "tipo_dato": "string",
-            "descripcion": "Valor anterior que tuvo el atributo (o codigo antiguo del establecimiento), guardado como texto",
+            "descripcion": "Valor anterior que tuvo el atributo (o código antiguo del establecimiento), guardado como texto",
         },
         {
             "columna": "tipo_columna",
@@ -520,12 +520,12 @@ def obtener_esquema_establecimientos_historial():
         {
             "columna": "year_inicio",
             "tipo_dato": "int",
-            "descripcion": "Primer anio en que el atributo tuvo este valor en el registro oficial",
+            "descripcion": "Primer año en que el atributo tuvo este valor en el registro oficial",
         },
         {
             "columna": "year_termino",
             "tipo_dato": "int",
-            "descripcion": "Ultimo anio en que el atributo tuvo este valor en el registro oficial",
+            "descripcion": "Último año en que el atributo tuvo este valor en el registro oficial",
         },
     ])
 
@@ -662,37 +662,37 @@ def obtener_resumen_hojas_mamografia():
         {
             "hoja_rem": "bm18 / bs17",
             "periodo_vigencia": "2015 - 2016",
-            "nivel_atencion": "Atencion Primaria (APS) y SS",
+            "nivel_atencion": "Atención Primaria (APS) y SS",
             "codigos_principales": "18090600, 17150200 (informadas), 18090800 / 17150400 (BIRADS 1-2), 18200100 / 17150600 (BIRADS 4-5-6)",
-            "funcion_en_registro": "Registran mamografias del programa de imagenes en APS (municipales en bm18 y Servicios de Salud en bs17) antes de fusionarse en a29.",
+            "funcion_en_registro": "Registran mamografías del programa de imágenes en APS (municipales en bm18 y Servicios de Salud en bs17) antes de fusionarse en a29.",
         },
         {
             "hoja_rem": "bs17a / bs17d / bm18a",
             "periodo_vigencia": "2015 - 2025 (bm18a)",
             "nivel_atencion": "Hospitalario y Municipal",
             "codigos_principales": "17a0401010, 17d0401010, 80401010 (bilateral), 80401110 (unilateral)",
-            "funcion_en_registro": "Contienen examenes y cirugias realizadas en especialidad hospitalaria (bs17a/bs17d en 2015-2016) y compras desde establecimientos municipales (bm18a).",
+            "funcion_en_registro": "Contienen exámenes y cirugías realizadas en especialidad hospitalaria (bs17a/bs17d en 2015-2016) y compras desde establecimientos municipales (bm18a).",
         },
         {
             "hoja_rem": "a29",
             "periodo_vigencia": "2017 - 2025",
-            "nivel_atencion": "Atencion Primaria (APS)",
+            "nivel_atencion": "Atención Primaria (APS)",
             "codigos_principales": "29000007 (solicitadas), 29000008 (informadas), 29000010 (BIRADS 1-2), 29000012 (BIRADS 4-5-6)",
-            "funcion_en_registro": "Reemplaza a bm18 y bs17 para consolidar el Programa de Imagenes Diagnosticas en APS y su clasificacion BI-RADS.",
+            "funcion_en_registro": "Reemplaza a bm18 y bs17 para consolidar el Programa de Imágenes Diagnósticas en APS y su clasificación BI-RADS.",
         },
         {
             "hoja_rem": "b",
             "periodo_vigencia": "2017 - 2025",
             "nivel_atencion": "Hospitalario y Especialidad",
-            "codigos_principales": "01010592 / 01014145 (bilateral 2D y 3D), 01012162 (mastectomia parcial), 01012163 (mastectomia radical)",
-            "funcion_en_registro": "Centraliza imagenes hospitalarias (incluyendo tomosintesis 3D desde 2020), biopsias y cirugias oncologicas mamarias.",
+            "codigos_principales": "01010592 / 01014145 (bilateral 2D y 3D), 01012162 (mastectomía parcial), 01012163 (mastectomía radical)",
+            "funcion_en_registro": "Centraliza imágenes hospitalarias (incluyendo tomosíntesis 3D desde 2020), biopsias y cirugías oncológicas mamarias.",
         },
         {
             "hoja_rem": "p12",
             "periodo_vigencia": "2015 - 2025",
-            "nivel_atencion": "Poblacion bajo control APS",
+            "nivel_atencion": "Población bajo control APS",
             "codigos_principales": "Cortes semestrales por grupo etario",
-            "funcion_en_registro": "Registra la cobertura de mujeres con mamografia vigente y examen fisico de mama al dia.",
+            "funcion_en_registro": "Registra la cobertura de mujeres con mamografía vigente y examen físico de mama al día.",
         },
     ])
 
@@ -905,7 +905,7 @@ def crear_grafico_tamizaje_mensual(tabla_mensual_mama):
             x=tabla_mensual_mama.index,
             y=tabla_mensual_mama["mamografia_informada_aps"],
             mode="lines+markers",
-            name="Mamografias Informadas APS",
+            name="Mamografías Informadas APS",
             line=dict(color=estilo["color_azul_clinico"], width=3, shape="spline"),
             marker=dict(size=5, color=estilo["color_azul_clinico"]),
             fill="tozeroy",
@@ -940,11 +940,11 @@ def crear_grafico_tamizaje_mensual(tabla_mensual_mama):
 
     figura_tamizaje.update_layout(
         title=dict(
-            text="Tamizaje Preventivo de Cancer de Mama en APS (2015-2025)",
+            text="Tamizaje Preventivo de Cáncer de Mama en APS (2015-2025)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Fecha (Mes y Anio)",
-        yaxis_title="Mamografias Informadas",
+        xaxis_title="Fecha (Mes y Año)",
+        yaxis_title="Mamografías Informadas",
         font=dict(
             family=estilo["familia_fuente"],
             size=estilo["tamano_ejes_grafico"],
@@ -987,7 +987,7 @@ def crear_grafico_birads_anual(tabla_anual_mama):
     )
 
     linea_base_2019 = tabla_anual_mama.loc[2019, "mamografia_birads_4_5_6"]
-    texto_linea_base = f"Linea Base 2019 ({int(linea_base_2019):,} casos)".replace(
+    texto_linea_base = f"Línea Base 2019 ({int(linea_base_2019):,} casos)".replace(
         ",", "."
     )
 
@@ -1006,7 +1006,7 @@ def crear_grafico_birads_anual(tabla_anual_mama):
             text="Sospecha o Certeza de Malignidad (BIRADS 4, 5 y 6)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Anio",
+        xaxis_title="Año",
         yaxis_title="Casos BIRADS 4, 5 o 6",
         yaxis_range=[0, max(casos_birads_sospecha) * 1.24],
         font=dict(
@@ -1046,7 +1046,7 @@ def crear_grafico_mastectomias_anual(tabla_anual_mama):
         go.Bar(
             x=anios_mama,
             y=tabla_anual_mama["mastectomia_radical_tardia"],
-            name="Radical c/Vaciamiento (Tardia)",
+            name="Radical c/Vaciamiento (Tardía)",
             marker=dict(
                 color=estilo["color_rosa_apagado"],
                 cornerradius=8,
@@ -1057,11 +1057,11 @@ def crear_grafico_mastectomias_anual(tabla_anual_mama):
     figura_mastectomias.update_layout(
         barmode="group",
         title=dict(
-            text="Mastectomias Conservadoras frente a Radicales (2015-2025)",
+            text="Mastectomías Conservadoras frente a Radicales (2015-2025)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Anio",
-        yaxis_title="Intervenciones Quirurgicas",
+        xaxis_title="Año",
+        yaxis_title="Intervenciones Quirúrgicas",
         font=dict(
             family=estilo["familia_fuente"],
             size=estilo["tamano_ejes_grafico"],
@@ -1091,8 +1091,8 @@ def crear_grafico_indice_ruta_clinica(tabla_anual_mama):
         "mamografia_informada_aps": "Tamizaje informado APS",
         "mamografia_birads_4_5_6": "BI-RADS 4-5-6 (sospecha)",
         "mamografia_bilateral_hospital": "Bilateral (Hosp. y Municipal)",
-        "mastectomia_parcial_conservadora": "Mastectomia parcial",
-        "mastectomia_radical_tardia": "Mastectomia radical",
+        "mastectomia_parcial_conservadora": "Mastectomía parcial",
+        "mastectomia_radical_tardia": "Mastectomía radical",
     }
     colores_ruta_indice = {
         "mamografia_informada_aps": estilo["color_azul_clinico"],
@@ -1131,11 +1131,11 @@ def crear_grafico_indice_ruta_clinica(tabla_anual_mama):
 
     figura_indice_ruta.update_layout(
         title=dict(
-            text="Evolucion Relativa de la Ruta Clinica Oncomamaria (Indice Base 2019 = 100)",
+            text="Evolución Relativa de la Ruta Clínica Oncomamaria (Índice Base 2019 = 100)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Anio",
-        yaxis_title="Indice (Anio 2019 = 100)",
+        xaxis_title="Año",
+        yaxis_title="Índice (Año 2019 = 100)",
         yaxis_range=[0, tabla_indice_2019.max().max() * 1.12],
         font=dict(
             family=estilo["familia_fuente"],
@@ -1190,8 +1190,8 @@ def crear_grafico_tasa_sospecha_birads(tabla_anual_mama):
             text="Tasa de Sospecha Maligna en Tamizaje APS (2015-2025)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Anio",
-        yaxis_title="Casos por 1.000 mamografias",
+        xaxis_title="Año",
+        yaxis_title="Casos por 1.000 mamografías",
         yaxis_range=[0, max(tasa_sospecha_por_mil) * 1.25],
         font=dict(
             family=estilo["familia_fuente"],
@@ -1222,7 +1222,7 @@ def crear_grafico_mastectomias_lineas(tabla_anual_mama):
             x=anios_mama,
             y=mastectomias_parciales,
             mode="lines+markers",
-            name="Mastectomias Parciales (Conservadoras)",
+            name="Mastectomías Parciales (Conservadoras)",
             line=dict(color=estilo["color_azul_clinico"], width=3),
             marker=dict(size=7, color=estilo["color_azul_clinico"]),
         )
@@ -1233,7 +1233,7 @@ def crear_grafico_mastectomias_lineas(tabla_anual_mama):
             x=anios_mama,
             y=mastectomias_radicales,
             mode="lines+markers",
-            name="Mastectomias Radicales",
+            name="Mastectomías Radicales",
             line=dict(color=estilo["color_rosa_apagado"], width=3),
             marker=dict(size=7, color=estilo["color_rosa_apagado"]),
         )
@@ -1241,10 +1241,10 @@ def crear_grafico_mastectomias_lineas(tabla_anual_mama):
 
     figura_mastectomias_lineas.update_layout(
         title=dict(
-            text="Mastectomias Radicales frente a Parciales (2015-2025)",
+            text="Mastectomías Radicales frente a Parciales (2015-2025)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Anio",
+        xaxis_title="Año",
         yaxis_title="Cantidad de Intervenciones",
         yaxis_range=[0, maximo_quirurgico * 1.18],
         font=dict(
@@ -1283,7 +1283,7 @@ def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
         go.Bar(
             x=anios_emp,
             y=resumen_anual_emp["tramo_50_54"],
-            name="Mujeres 50 a 54 anios (col04)",
+            name="Mujeres 50 a 54 años (col04)",
             marker=dict(color=estilo["color_azul_clinico"]),
         )
     )
@@ -1292,7 +1292,7 @@ def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
         go.Bar(
             x=anios_emp,
             y=resumen_anual_emp["tramo_55_59"],
-            name="Mujeres 55 a 59 anios (col05)",
+            name="Mujeres 55 a 59 años (col05)",
             marker=dict(color=estilo["color_grafico_secundario"], cornerradius=6),
         )
     )
@@ -1315,7 +1315,7 @@ def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
             x=[int(anios_emp[0]) - 0.4, int(anios_emp[-1]) + 0.4],
             y=[base_emp_2019, base_emp_2019],
             mode="lines",
-            name=f"Linea base 2019 EMP ({int(base_emp_2019):,})".replace(",", "."),
+            name=f"Línea base 2019 EMP ({int(base_emp_2019):,})".replace(",", "."),
             line=dict(color="rgba(12, 35, 64, 0.45)", width=1.6, dash="dot"),
             hoverinfo="skip",
         )
@@ -1327,7 +1327,7 @@ def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
         line_color="#3D7A74",
         line_width=1.6,
         layer="below",
-        annotation_text="Ley 21.551 (sin orden medica)",
+        annotation_text="Ley 21.551 (sin orden médica)",
         annotation_position="top left",
         annotation_yshift=-4,
     )
@@ -1335,11 +1335,11 @@ def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
     figura_emp.update_layout(
         barmode="stack",
         title=dict(
-            text="Tamizaje Preventivo en Mujeres del EMP: 50 a 59 Anios (2015-2025)",
+            text="Tamizaje Preventivo en Mujeres del EMP: 50 a 59 Años (2015-2025)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Anio",
-        yaxis_title="Mamografias informadas (50-59 anios)",
+        xaxis_title="Año",
+        yaxis_title="Mamografías informadas (50-59 años)",
         yaxis_range=[0, float(resumen_anual_emp["total_emp_50_59"].max()) * 1.35],
         font=dict(
             family=estilo["familia_fuente"],
