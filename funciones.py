@@ -954,7 +954,21 @@ def crear_grafico_tamizaje_mensual(tabla_mensual_mama):
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
         hovermode="x unified",
-        legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.02),
+        xaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.02,
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
@@ -1017,8 +1031,22 @@ def crear_grafico_birads_anual(tabla_anual_mama):
         paper_bgcolor=estilo["color_fondo_tarjetas"],
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
-        xaxis=dict(dtick=1),
-        legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.02),
+        xaxis=dict(
+            dtick=1,
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.02,
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
@@ -1070,8 +1098,22 @@ def crear_grafico_mastectomias_anual(tabla_anual_mama):
         paper_bgcolor=estilo["color_fondo_tarjetas"],
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
-        xaxis=dict(dtick=1),
-        legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.02),
+        xaxis=dict(
+            dtick=1,
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.02,
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
@@ -1146,8 +1188,22 @@ def crear_grafico_indice_ruta_clinica(tabla_anual_mama):
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
         hovermode="x unified",
-        xaxis=dict(dtick=1),
-        legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.02),
+        xaxis=dict(
+            dtick=1,
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.02,
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
@@ -1202,51 +1258,93 @@ def crear_grafico_tasa_sospecha_birads(tabla_anual_mama):
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
         hovermode="x unified",
-        xaxis=dict(dtick=1),
+        xaxis=dict(
+            dtick=1,
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(font=dict(size=estilo["tamano_leyenda_grafico"])),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
     return figura_tasa_sospecha
 
 
-def crear_grafico_mastectomias_lineas(tabla_anual_mama):
+def crear_grafico_estacionalidad_mensual(tabla_mensual_mama):
     estilo = CONFIGURACION_ESTILO
-    anios_mama = tabla_anual_mama.index
-    mastectomias_parciales = tabla_anual_mama["mastectomia_parcial_conservadora"]
-    mastectomias_radicales = tabla_anual_mama["mastectomia_radical_tardia"]
-    maximo_quirurgico = max(float(mastectomias_parciales.max()), float(mastectomias_radicales.max()))
+    nombres_meses = [
+        "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+        "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+    ]
+    tabla_base_mes = tabla_mensual_mama[["mamografia_informada_aps"]].copy()
+    tabla_base_mes["anio_registro"] = tabla_base_mes.index.year
+    tabla_base_mes["mes_numero"] = tabla_base_mes.index.month
 
-    figura_mastectomias_lineas = go.Figure()
-    figura_mastectomias_lineas.add_trace(
-        go.Scatter(
-            x=anios_mama,
-            y=mastectomias_parciales,
-            mode="lines+markers",
-            name="Mastectomías Parciales (Conservadoras)",
-            line=dict(color=estilo["color_azul_clinico"], width=3),
-            marker=dict(size=7, color=estilo["color_azul_clinico"]),
-        )
+    serie_prepandemia = (
+        tabla_base_mes[tabla_base_mes["anio_registro"].between(2015, 2019)]
+        .groupby("mes_numero")["mamografia_informada_aps"]
+        .mean()
+        .reindex(range(1, 13))
+    )
+    serie_pospandemia = (
+        tabla_base_mes[tabla_base_mes["anio_registro"].between(2021, 2025)]
+        .groupby("mes_numero")["mamografia_informada_aps"]
+        .mean()
+        .reindex(range(1, 13))
     )
 
-    figura_mastectomias_lineas.add_trace(
+    maximo_estacional = max(
+        float(serie_prepandemia.max()),
+        float(serie_pospandemia.max()),
+    )
+
+    figura_estacionalidad = go.Figure()
+
+    figura_estacionalidad.add_vrect(
+        x0=6.55,
+        x1=7.45,
+        fillcolor=estilo["color_sombreado_cuarentena"],
+        layer="below",
+        line_width=0,
+        annotation_text="Corte agosto",
+        annotation_position="top",
+        annotation_font=dict(size=12, color=estilo["color_rosa_apagado"]),
+    )
+
+    figura_estacionalidad.add_trace(
         go.Scatter(
-            x=anios_mama,
-            y=mastectomias_radicales,
+            x=nombres_meses,
+            y=serie_prepandemia.round(0),
             mode="lines+markers",
-            name="Mastectomías Radicales",
-            line=dict(color=estilo["color_rosa_apagado"], width=3),
+            name="Prepandemia (2015-2019)",
+            line=dict(color=estilo["color_rosa_apagado"], width=3, shape="spline"),
             marker=dict(size=7, color=estilo["color_rosa_apagado"]),
         )
     )
 
-    figura_mastectomias_lineas.update_layout(
+    figura_estacionalidad.add_trace(
+        go.Scatter(
+            x=nombres_meses,
+            y=serie_pospandemia.round(0),
+            mode="lines+markers",
+            name="Pospandemia (2021-2025)",
+            line=dict(color=estilo["color_azul_clinico"], width=3, shape="spline"),
+            marker=dict(size=7, color=estilo["color_azul_clinico"]),
+        )
+    )
+
+    figura_estacionalidad.update_layout(
         title=dict(
-            text="Mastectomías Radicales frente a Parciales (2015-2025)",
+            text="Estacionalidad Mensual de Mamografías en APS (Promedio)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
-        xaxis_title="Año",
-        yaxis_title="Cantidad de Intervenciones",
-        yaxis_range=[0, maximo_quirurgico * 1.18],
+        xaxis_title="Mes del Año",
+        yaxis_title="Promedio Mensual de Exámenes",
+        yaxis_range=[0, maximo_estacional * 1.22],
         font=dict(
             family=estilo["familia_fuente"],
             size=estilo["tamano_ejes_grafico"],
@@ -1256,12 +1354,25 @@ def crear_grafico_mastectomias_lineas(tabla_anual_mama):
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
         hovermode="x unified",
-        xaxis=dict(dtick=1),
-        legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.02),
+        xaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.02,
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
-    return figura_mastectomias_lineas
+    return figura_estacionalidad
 
 
 def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
@@ -1350,8 +1461,22 @@ def crear_grafico_tamizaje_emp_50_59(resumen_anual_emp):
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
         hovermode="x unified",
-        xaxis=dict(dtick=1),
-        legend=dict(yanchor="top", y=0.98, xanchor="left", x=0.02),
+        xaxis=dict(
+            dtick=1,
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        yaxis=dict(
+            tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+            title_font=dict(size=estilo["tamano_ejes_grafico"]),
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.98,
+            xanchor="left",
+            x=0.02,
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )

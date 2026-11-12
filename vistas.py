@@ -25,7 +25,7 @@ from funciones import (
     crear_grafico_mastectomias_anual,
     crear_grafico_indice_ruta_clinica,
     crear_grafico_tasa_sospecha_birads,
-    crear_grafico_mastectomias_lineas,
+    crear_grafico_estacionalidad_mensual,
     crear_grafico_tamizaje_emp_50_59,
 )
 
@@ -34,8 +34,37 @@ from funciones import (
 # VISTAS DE CADA SECCION DEL DASHBOARD (DESIGN SYSTEM CLINICO LIMPIO)
 # ==============================================================================
 
+
 def renderizar_pestana_tablas():
     st.header("Estructura de Datos DEIS-REM")
+
+    st.markdown(
+        """
+        <div class="mapa-tablas-contenedor">
+            <div class="tarjeta-bento tarjeta-superficie">
+                <span class="pildora pildora-clinica">Tabla central</span>
+                <h3>Hechos (conteos mensuales)</h3>
+                <p>Guarda cuántas atenciones se informaron cada mes y año. Como usa códigos numéricos, se apoya en los diccionarios para leerse.</p>
+            </div>
+            <div class="tarjeta-bento tarjeta-blanca">
+                <span class="pildora pildora-suave">Qué se realizó</span>
+                <h3>Códigos (el traductor)</h3>
+                <p>Traduce el código de prestación y columna a texto clínico legible: qué examen o cirugía es y si mide hombres, mujeres o edad.</p>
+            </div>
+            <div class="tarjeta-bento tarjeta-blanca">
+                <span class="pildora pildora-suave">Nivel de detalle</span>
+                <h3>Prestaciones y Columnas</h3>
+                <p>Desarman cada glosa en forma de árbol jerárquico, separando subgrupos de actividad, sexo, edad y tipo de conteo.</p>
+            </div>
+            <div class="tarjeta-bento tarjeta-rosa-alerta">
+                <span class="pildora pildora-rosa">Dónde ocurrió</span>
+                <h3>Establecimientos e Historial</h3>
+                <p>Ubica cada código de recinto en su CESFAM, hospital, comuna y Servicio de Salud, rastreando cambios de nombre o código en el tiempo.</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # Barra de navegacion horizontal para explorar las 6 tablas oficiales del repositorio DEIS-REM
     tabla_seleccionada = st.radio(
@@ -66,8 +95,11 @@ def renderizar_pestana_tablas():
 """
 
         mostrar_bloque_codigo_y_tabla(
-            titulo_bloque="",
-            descripcion_bloque="",
+            titulo_bloque="Ejemplo real: cómo se registra una misma atención",
+            descripcion_bloque=(
+                "La consulta toma cuatro filas de enero de 2024 para un mismo recinto (101010) y prestación (06020201). "
+                "En la tabla de la derecha ves cómo el total de 22 atenciones (col01) se desglosa en 21 hombres (col02) y 1 mujer (col03)."
+            ),
             codigo_ejemplo=codigo_muestra_hechos,
             tabla_resultado=obtener_muestra_hechos(),
             en_columnas=True,
@@ -94,8 +126,11 @@ def renderizar_pestana_tablas():
 \"\"\").df()"""
 
         mostrar_bloque_codigo_y_tabla(
-            titulo_bloque="",
-            descripcion_bloque="",
+            titulo_bloque="Ejemplo real: qué significado esconde cada código",
+            descripcion_bloque=(
+                "Aquí consultamos la prestación 04025025 (atención de salud mental en la hoja A04 de 2024). "
+                "La tabla muestra cómo la misma atención cambia de significado según la columna: total de ambos sexos (col01), hombres (col02), mujeres (col03) o tramo menor de 1 año (col04)."
+            ),
             codigo_ejemplo=codigo_muestra_codigos,
             tabla_resultado=obtener_muestra_codigos(),
             en_columnas=True,
@@ -122,8 +157,11 @@ def renderizar_pestana_tablas():
 \"\"\").df()"""
 
         mostrar_bloque_codigo_y_tabla(
-            titulo_bloque="",
-            descripcion_bloque="",
+            titulo_bloque="Ejemplo real: cómo se ordena el árbol de actividades",
+            descripcion_bloque=(
+                "La muestra revisa nodos iniciales de actividades del nivel 1 (como atenciones a personas de 65 años y más o actividades en colegios e instituciones) "
+                "para ver cómo el formulario agrupa las glosas antes de llegar al detalle específico."
+            ),
             codigo_ejemplo=codigo_muestra_jerarquia_prestaciones,
             tabla_resultado=obtener_muestra_jerarquia_prestaciones(),
             en_columnas=True,
@@ -132,6 +170,7 @@ def renderizar_pestana_tablas():
     elif tabla_seleccionada == "Columnas":
         with st.container(border=False):
             st.subheader("Tabla de Jerarquía de Columnas")
+
             mostrar_tabla_configurable(obtener_esquema_jerarquia_columnas())
 
         codigo_muestra_jerarquia_columnas = """con.sql(\"\"\"
@@ -150,8 +189,11 @@ def renderizar_pestana_tablas():
 \"\"\").df()"""
 
         mostrar_bloque_codigo_y_tabla(
-            titulo_bloque="",
-            descripcion_bloque="",
+            titulo_bloque="Ejemplo real: desglose de atributos de columna",
+            descripcion_bloque=(
+                "Muestra cuatro registros de nivel 1 del catálogo de columnas, donde cada atributo (como acompañante o vínculo con el agresor) "
+                "se separa en pares clave-valor ordenados para facilitar los cruces analíticos."
+            ),
             codigo_ejemplo=codigo_muestra_jerarquia_columnas,
             tabla_resultado=obtener_muestra_jerarquia_columnas(),
             en_columnas=True,
@@ -160,6 +202,7 @@ def renderizar_pestana_tablas():
     elif tabla_seleccionada == "Establecimientos":
         with st.container(border=False):
             st.subheader("Tabla de Establecimientos")
+
             mostrar_tabla_configurable(obtener_esquema_establecimientos())
 
         codigo_muestra_establecimientos = """con.sql(\"\"\"
@@ -176,8 +219,11 @@ def renderizar_pestana_tablas():
 \"\"\").df()"""
 
         mostrar_bloque_codigo_y_tabla(
-            titulo_bloque="",
-            descripcion_bloque="",
+            titulo_bloque="Ejemplo real: ficha territorial de cada recinto",
+            descripcion_bloque=(
+                "Presenta cuatro códigos de establecimientos pertenecientes al Servicio de Salud Arica y Parinacota en la comuna de Arica, "
+                "mostrando su tipo de centro, dependencia administrativa y nivel de complejidad."
+            ),
             codigo_ejemplo=codigo_muestra_establecimientos,
             tabla_resultado=obtener_muestra_establecimientos(),
             en_columnas=True,
@@ -186,6 +232,7 @@ def renderizar_pestana_tablas():
     elif tabla_seleccionada == "Establecimientos Historial":
         with st.container(border=False):
             st.subheader("Tabla de Historial de Establecimientos")
+
             mostrar_tabla_configurable(obtener_esquema_establecimientos_historial())
 
         codigo_muestra_establecimientos_historial = """con.sql(\"\"\"
@@ -200,8 +247,11 @@ def renderizar_pestana_tablas():
 \"\"\").df()"""
 
         mostrar_bloque_codigo_y_tabla(
-            titulo_bloque="",
-            descripcion_bloque="",
+            titulo_bloque="Ejemplo real: trazabilidad de cambios en el tiempo",
+            descripcion_bloque=(
+                "Sigue el historial del recinto 101010: muestra cuál era su código antiguo (01-010) y el periodo exacto de vigencia (year_inicio a year_termino) "
+                "de cada tipo de establecimiento, condición y fecha de apertura."
+            ),
             codigo_ejemplo=codigo_muestra_establecimientos_historial,
             tabla_resultado=obtener_muestra_establecimientos_historial(),
             en_columnas=True,
@@ -241,33 +291,40 @@ def renderizar_pestana_busqueda():
             <h3 style="margin-top: 0; margin-bottom: 5px;">Tamizaje y Pesquisa Precoz en Atención Primaria</h3>
             <p>
                 <strong>Chequeos preventivos en consultorios y CESFAM:</strong>
-                Mamografía preventiva gratuita para mujeres de 50 a 69 años, orientada a detectar lesiones antes de que presenten síntomas. Desde 2023 (Ley 21.551) se puede realizar sin necesidad de orden médica previa.
+                Mamografía preventiva gratuita para mujeres de 50 a 69 años. Desde 2023 (Ley 21.551) se puede realizar sin necesidad de orden médica previa.
             </p>
         </div>
 
         <div class="tarjeta-bento tarjeta-blanca">
             <div style="margin-bottom: 0px;">
             </div>
-            <h3 style="margin-top: 0; margin-bottom: 14px;">Clasificación Radiológica BI-RADS</h3>
-            <div class="fila-item-bento">
-                <div><strong>BI-RADS 0</strong> — Estudio incompleto </div>
-                <span class="pildora pildora-suave">Complementar</span>
-            </div>
-            <div class="fila-item-bento">
-                <div><strong>BI-RADS 1 y 2</strong> — Hallazgo normal o benigno</div>
-                <span class="pildora pildora-clinica">Normal / Benigno</span>
-            </div>
-            <div class="fila-item-bento">
-                <div><strong>BI-RADS 3</strong> — Probablemente benigno</div>
-                <span class="pildora pildora-suave">Control 6 meses</span>
-            </div>
-            <div class="fila-item-bento">
-                <div><strong>BI-RADS 4 y 5</strong> — Sospecha o alta probabilidad de malignidad</div>
-                <span class="pildora pildora-rosa">Alerta GES / Biopsia</span>
-            </div>
-            <div class="fila-item-bento">
-                <div><strong>BI-RADS 6</strong> — Malignidad ya confirmada</div>
-                <span class="pildora pildora-oscura">Confirmado</span>
+            <h3 style="margin-top: 0; margin-bottom: 10px;">Clasificación Radiológica BI-RADS</h3>
+            <div class="birads-semaforo-grid">
+                <div class="birads-item-circulo">
+                    <div class="birads-circulo birads-circulo-suave">0</div>
+                    <div class="birads-titulo">Incompleto</div>
+                    <div class="birads-subtitulo">Complementar</div>
+                </div>
+                <div class="birads-item-circulo">
+                    <div class="birads-circulo birads-circulo-clinico">1 - 2</div>
+                    <div class="birads-titulo">Normal</div>
+                    <div class="birads-subtitulo">Hallazgo benigno</div>
+                </div>
+                <div class="birads-item-circulo">
+                    <div class="birads-circulo birads-circulo-suave">3</div>
+                    <div class="birads-titulo">Control 6m</div>
+                    <div class="birads-subtitulo">Prob. benigno</div>
+                </div>
+                <div class="birads-item-circulo">
+                    <div class="birads-circulo birads-circulo-rosa">4 - 5</div>
+                    <div class="birads-titulo">Alerta GES</div>
+                    <div class="birads-subtitulo">Sospecha biopsia</div>
+                </div>
+                <div class="birads-item-circulo">
+                    <div class="birads-circulo birads-circulo-oscuro">6</div>
+                    <div class="birads-titulo">Confirmado</div>
+                    <div class="birads-subtitulo">Malignidad confirmada.</div>
+                </div>
             </div>
         </div>
 
@@ -277,7 +334,7 @@ def renderizar_pestana_busqueda():
             <h3 style="margin-top: 0; margin-bottom: 10px;">Confirmación Diagnóstica y Etapificación</h3>
             <p style="margin-bottom: 0;">
                 Ante un resultado <strong>BI-RADS 4 o 5</strong> o sospecha en examen físico, la paciente ingresa a la Unidad de Patología Mamaria hospitalaria.
-                Contempla ecotomografía complementaria, confirmación histológica mediante biopsia core o estereotáxica (<code>Hoja B</code>) y etapificación.
+                Contempla confirmación histológica mediante biopsia core o estereotáxica (<code>Hoja B</code>) y etapificación.
             </p>
         </div>
 
@@ -407,7 +464,7 @@ def renderizar_pestana_analisis_mama():
         mostrar_bloque_grafico(
             titulo_grafico="Evolución Quirúrgica",
             descripcion_previa=(
-                f"Las mastectomías radicales con vaciamiento axilar alcanzaron su pico en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las cirugías parciales conservadoras crecen hasta un nuevo máximo histórico en **2025** ({texto_parciales_2025} intervenciones)."
+                f"Las mastectomías radicales alcanzaron su máximo en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las cirugías parciales crecen hasta un nuevo máximo histórico en **2025** ({texto_parciales_2025} intervenciones)."
             ),
             figura_plotly=crear_grafico_mastectomias_anual(tabla_anual_mama),
         )
@@ -420,7 +477,7 @@ def renderizar_pestana_analisis_mama():
         figura_plotly=crear_grafico_indice_ruta_clinica(tabla_anual_mama),
     )
 
-    columna_graf_tasa, columna_graf_proporcion = st.columns(2, gap="medium")
+    columna_graf_tasa, columna_graf_estacionalidad = st.columns(2, gap="medium")
 
     with columna_graf_tasa:
         mostrar_bloque_grafico(
@@ -431,14 +488,16 @@ def renderizar_pestana_analisis_mama():
             figura_plotly=crear_grafico_tasa_sospecha_birads(tabla_anual_mama),
         )
 
-    with columna_graf_proporcion:
-        mostrar_bloque_grafico(
-            titulo_grafico="Evolución de Mastectomías Radicales y Parciales",
-            descripcion_previa=(
-                f"Comparación directa de la trayectoria anual en número de cirugías. Las parciales mantienen un crecimiento sostenido desde **2.591 (2015)** hasta **{texto_parciales_2025} en 2025**, mientras las mastectomías radicales alcanzaron su máximo en **2023 (3.398)** y se mantienen en **2024 (3.257)** y **2025 ({texto_radicales_2025})**."
-            ),
-            figura_plotly=crear_grafico_mastectomias_lineas(tabla_anual_mama),
-        )
+    if tabla_mensual_mama is not None:
+        with columna_graf_estacionalidad:
+            mostrar_bloque_grafico(
+                titulo_grafico="Estacionalidad Mensual del Tamizaje en APS",
+                descripcion_previa=(
+                    "Comparación del promedio mensual entre prepandemia (**2015-2019**) y pospandemia (**2021-2025**), excluyendo 2020 por el quiebre sanitario. "
+                    "Tras los mínimos de enero y febrero, destaca un máximo recurrente en **agosto** asociado al corte de evaluación de metas en APS, seguido por la baja de septiembre y el cierre anual de noviembre-diciembre."
+                ),
+                figura_plotly=crear_grafico_estacionalidad_mensual(tabla_mensual_mama),
+            )
 
     resumen_anual_emp = cargar_datos_tamizaje_emp_50_59()
 

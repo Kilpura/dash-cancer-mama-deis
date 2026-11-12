@@ -117,29 +117,29 @@ CONFIGURACION_ESTILO = {
 
     # Tamanos de letra en la interfaz web
     "tamano_titulo_principal": "58px",
-    "tamano_encabezado_seccion": "35px",
-    "tamano_subtitulo": "25px",
-    "tamano_texto_general": "18px",
+    "tamano_encabezado_seccion": "55px",
+    "tamano_subtitulo": "35px",
+    "tamano_texto_general": "25px",
     "tamano_etiqueta_caption": "15px",
     "tamano_menu_lateral": "12px",
-    "tamano_barra_horizontal": "12px",
+    "tamano_barra_horizontal": "22px",
     "ancho_menu_lateral": "130px",
-    "tamano_codigo": "9px",
+    "tamano_codigo": "10px",
 
     # Configuracion de tamano de textos de la Ruta Clinica
-    "tamano_titulo_ruta_clinica": "18px",
-    "tamano_texto_ruta_clinica": "13px",
+    "tamano_titulo_ruta_clinica": "28px",
+    "tamano_texto_ruta_clinica": "15px",
     "tamano_pildora_ruta_clinica": "14px",
     "tamano_pildora_birads": "12px",
 
     # Configuracion de las tablas de esquema (columna, tipo, descripcion)
-    "tamano_letra_tabla_esquema": "12px",
-    "relleno_fila_tabla_esquema": "8px 14px",
+    "tamano_letra_tabla_esquema": "18px",
+    "relleno_fila_tabla_esquema": "10px 14px",
     "altura_maxima_tabla_esquema": "none",
-    "ancho_tabla_esquema": "75%",
+    "ancho_tabla_esquema": "70%",
 
     # Configuracion independiente de la tabla de consolidacion historica (Analisis e Impacto)
-    "tamano_letra_tabla_consolidacion": "9px",
+    "tamano_letra_tabla_consolidacion": "14px",
     "relleno_fila_tabla_consolidacion": "4px 5px",
     "altura_maxima_tabla_consolidacion": "none",
     "ancho_tabla_consolidacion": "fit-content",
@@ -149,7 +149,7 @@ CONFIGURACION_ESTILO = {
     "relleno_fila_tabla": "10px 16px",
     "altura_maxima_tabla": "445px",
     "proporcion_columnas_codigo_tabla": [0.60, 1.90],
-    "proporcion_tarjetas_ruta_clinica": [1.0, 1.65, 1.0, 0.95],
+    "proporcion_tarjetas_ruta_clinica": [1.0, 1.48, 1.0, 0.95],
     "separacion_columnas": "40px",
     "usar_tabla_html_escalable": True,
     "color_fondo_encabezado_tabla": paleta_base["color_superficie_suave"],
@@ -190,8 +190,10 @@ CONFIGURACION_ESTILO = {
     "color_linea_referencia": paleta_base["color_linea_referencia"],
     "plantilla_plotly": "plotly_white",
     "tamano_titulo_grafico": 20,
-    "tamano_ejes_grafico": 14,
-    "altura_grafico": 430,
+    "tamano_ejes_grafico": 24,
+    "tamano_numeros_ejes": 14,
+    "tamano_leyenda_grafico": 20,
+    "altura_grafico": 600,
 }
 
 
@@ -250,10 +252,10 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {{
 
 .block-container,
 [data-testid="stMainBlockContainer"] {{
-    padding-top: 0.5rem !important;
+    padding-top: 0rem !important;
     padding-bottom: 2rem !important;
-    padding-left: 2.8rem !important;
-    padding-right: 2.8rem !important;
+    padding-left: 5rem !important;
+    padding-right: 5rem !important;
     max-width: 100% !important;
 }}
 
@@ -507,7 +509,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
 /* Tarjetas Bento del Design System "Clinico limpio" */
 .tarjeta-bento {{
     border-radius: {estilo["radio_borde_tarjetas"]};
-    padding: 24px 26px;
+    padding: 8px 26px 14px 26px;
+    margin-top: 8px !important;
     margin-bottom: 18px;
     box-shadow: 0 4px 16px rgba(12, 35, 64, 0.04);
     height: 100%;
@@ -623,7 +626,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
     justify-content: space-between;
     align-items: center;
     gap: 5px;
-    padding: 7px 10px;
+    padding: 3px 10px;
     border-radius: 14px;
     margin-bottom: 10px;
     background-color: {estilo["color_fondo_pagina"]};
@@ -676,7 +679,7 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
 .ruta-clinica-contenedor .pildora {{
     font-family: {estilo["familia_fuente"]} !important;
     font-size: {estilo["tamano_pildora_ruta_clinica"]} !important;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.4;
     padding: 4px 12px;
     border-radius: 999px;
@@ -687,10 +690,134 @@ div[data-testid="stVerticalBlockBorderWrapper"] {{
     font-family: {estilo["familia_fuente"]} !important;
     font-size: {estilo["tamano_pildora_birads"]} !important;
     font-weight: 400;
-    line-height: 1.4;
-    padding: 2px 11px;
+    line-height: 1.5;
+    padding: 1px 11px;
     border-radius: 999px;
     white-space: normal;
+}}
+
+/* Semaforo circular BI-RADS dentro de la Ruta Clinica */
+.birads-semaforo-grid {{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    align-items: start;
+    margin-top: 8px;
+}}
+
+.birads-item-circulo {{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}}
+
+.birads-circulo {{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: {estilo["familia_fuente"]} !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    margin-bottom: 6px;
+    box-shadow: 0 3px 10px rgba(12, 35, 64, 0.10);
+}}
+
+.birads-circulo-suave {{
+    background-color: {estilo["color_superficie_suave"]};
+    color: {estilo["color_tinta"]} !important;
+    border: 1px solid #C5D9EA;
+}}
+
+.birads-circulo-clinico {{
+    background-color: {estilo["color_azul_clinico"]};
+    color: #FFFFFF !important;
+}}
+
+.birads-circulo-rosa {{
+    background-color: {estilo["color_rosa_apagado"]};
+    color: #FFFFFF !important;
+}}
+
+.birads-circulo-oscuro {{
+    background-color: {estilo["color_tinta"]};
+    color: #FFFFFF !important;
+}}
+
+.birads-titulo {{
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: {estilo["color_tinta"]} !important;
+    line-height: 1.2 !important;
+}}
+
+.birads-subtitulo {{
+    font-size: 12px !important;
+    color: #526478 !important;
+    line-height: 1.25 !important;
+    margin-top: 2px;
+}}
+
+@media (max-width: 640px) {{
+    .birads-semaforo-grid {{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }}
+}}
+
+/* Mapa visual de conexion entre tablas (pestana Tablas) */
+.mapa-tablas-contenedor {{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+    margin-top: 8px;
+    margin-bottom: 20px;
+}}
+
+.mapa-tablas-contenedor .tarjeta-bento {{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 16px 18px !important;
+    height: 100%;
+}}
+
+.mapa-tablas-contenedor h3 {{
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin-top: 8px !important;
+    margin-bottom: 6px !important;
+    padding: 0 !important;
+    line-height: 1.25 !important;
+}}
+
+.mapa-tablas-contenedor p,
+.mapa-tablas-contenedor code {{
+    font-size: 18px !important;
+    line-height: 1.45 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}}
+
+.mapa-tablas-contenedor .pildora {{
+    font-size: 25px !important;
+    padding: 5px 14px !important;
+    font-weight: 600 !important;
+}}
+
+@media (max-width: 1100px) {{
+    .mapa-tablas-contenedor {{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }}
+}}
+
+@media (max-width: 640px) {{
+    .mapa-tablas-contenedor {{
+        grid-template-columns: 1fr;
+    }}
 }}
 
 /* Tipografia monoespaciada IBM Plex Mono para todo el codigo */
