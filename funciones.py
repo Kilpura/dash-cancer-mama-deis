@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import streamlit as st
 from estilos import CONFIGURACION_ESTILO
 
@@ -889,6 +890,175 @@ def cargar_datos_tamizaje_emp_50_59():
     return resumen_anual_emp
 
 
+DICCIONARIO_MACROZONAS_CHILE = {
+    "arica y parinacota": "Macrozona Norte",
+    "tarapaca": "Macrozona Norte",
+    "antofagasta": "Macrozona Norte",
+    "atacama": "Macrozona Norte",
+    "coquimbo": "Macrozona Norte",
+    "valparaiso": "Macrozona Centro (sin RM)",
+    "libertador general bernardo o'higgins": "Macrozona Centro (sin RM)",
+    "maule": "Macrozona Centro (sin RM)",
+    "metropolitana de santiago": "Región Metropolitana",
+    "ñuble": "Macrozona Sur",
+    "biobio": "Macrozona Sur",
+    "la araucania": "Macrozona Sur",
+    "los rios": "Macrozona Sur",
+    "los lagos": "Macrozona Sur",
+    "aysen del general carlos ibañez del campo": "Macrozona Austral",
+    "magallanes y de la antartica chilena": "Macrozona Austral",
+}
+
+ORDEN_MACROZONAS = [
+    "Región Metropolitana",
+    "Macrozona Sur",
+    "Macrozona Centro (sin RM)",
+    "Macrozona Norte",
+    "Macrozona Austral",
+]
+
+
+def _colores_macrozonas():
+    estilo = CONFIGURACION_ESTILO
+    return {
+        "Región Metropolitana": estilo["color_tinta"],
+        "Macrozona Sur": estilo["color_azul_clinico"],
+        "Macrozona Centro (sin RM)": estilo["color_grafico_secundario"],
+        "Macrozona Norte": "#3D7A74",
+        "Macrozona Austral": estilo["color_rosa_apagado"],
+    }
+
+
+def _buscar_archivo_datos(nombre_archivo):
+    directorio_actual = os.path.dirname(os.path.abspath(__file__))
+    rutas_candidatas = [
+        os.path.join(directorio_actual, nombre_archivo),
+        os.path.join(directorio_actual, "..", nombre_archivo),
+        nombre_archivo,
+        os.path.join("..", nombre_archivo),
+        f"G:/Mi unidad/do/datopia/deis-rem/{nombre_archivo}",
+    ]
+    for ruta_posible in rutas_candidatas:
+        if os.path.exists(ruta_posible):
+            return ruta_posible
+    return None
+
+
+@st.cache_data
+def cargar_datos_tamizaje_macrozona():
+    ruta_encontrada = _buscar_archivo_datos("datos_tamizaje_region_2015_2025.parquet")
+
+    if ruta_encontrada is not None:
+        tabla_region = pd.read_parquet(ruta_encontrada)
+        tabla_region["macrozona"] = (
+            tabla_region["region"].astype(str).str.lower().map(DICCIONARIO_MACROZONAS_CHILE)
+        )
+        tabla_region = tabla_region.dropna(subset=["macrozona"])
+        tabla_anual_macro = (
+            tabla_region.groupby(["anio", "macrozona"], as_index=False)["cantidad_total"]
+            .sum()
+        )
+    else:
+        anios_respaldo = list(range(2015, 2026))
+        valores_respaldo_tamizaje = {
+            "Región Metropolitana": [119341, 122318, 114302, 133450, 137212, 76106, 130457, 166814, 192210, 207991, 179020],
+            "Macrozona Sur": [89754, 87257, 102235, 104000, 120933, 67174, 127263, 147423, 178212, 201001, 159730],
+            "Macrozona Centro (sin RM)": [68892, 67077, 79696, 92153, 97880, 49620, 96874, 120899, 146520, 152564, 124098],
+            "Macrozona Norte": [31119, 31312, 41722, 33986, 41638, 27694, 51750, 57472, 79060, 74199, 74458],
+            "Macrozona Austral": [4109, 3362, 4980, 5953, 5301, 2871, 9171, 7710, 8378, 9113, 8762],
+        }
+        filas_respaldo = [
+            {
+                "anio": anio_valor,
+                "macrozona": nombre_macrozona,
+                "cantidad_total": serie_valores[indice_anio],
+            }
+            for nombre_macrozona, serie_valores in valores_respaldo_tamizaje.items()
+            for indice_anio, anio_valor in enumerate(anios_respaldo)
+        ]
+        tabla_anual_macro = pd.DataFrame(filas_respaldo)
+
+    tabla_base_2019 = (
+        tabla_anual_macro[tabla_anual_macro["anio"] == 2019]
+        .set_index("macrozona")["cantidad_total"]
+        .rename("base_2019")
+    )
+    tabla_anual_macro = tabla_anual_macro.merge(
+        tabla_base_2019, on="macrozona", how="left"
+    )
+    tabla_anual_macro["indice_base"] = (
+        tabla_anual_macro["cantidad_total"] / tabla_anual_macro["base_2019"]
+    ) * 100
+    return tabla_anual_macro.sort_values(["anio", "macrozona"]).reset_index(drop=True)
+
+
+@st.cache_data
+def cargar_datos_cirugia_macrozona():
+    ruta_encontrada = _buscar_archivo_datos("datos_cirugia_region_2015_2025.parquet")
+
+    mapa_tipos_cirugia = {
+        "17a2002002": "Mastectomía Parcial",
+        "17d2002002": "Mastectomía Parcial",
+        "1012162": "Mastectomía Parcial",
+        "17a2002003": "Mastectomía Radical",
+        "17d2002003": "Mastectomía Radical",
+        "1012163": "Mastectomía Radical",
+    }
+
+    if ruta_encontrada is not None:
+        tabla_cirugia_region = pd.read_parquet(ruta_encontrada)
+        tabla_cirugia_region["macrozona"] = (
+            tabla_cirugia_region["region"]
+            .astype(str)
+            .str.lower()
+            .map(DICCIONARIO_MACROZONAS_CHILE)
+        )
+        tabla_cirugia_region["tipo_cirugia"] = (
+            tabla_cirugia_region["cod_prestacion"]
+            .astype(str)
+            .str.lstrip("0")
+            .map(mapa_tipos_cirugia)
+        )
+        tabla_cirugia_region = tabla_cirugia_region.dropna(
+            subset=["macrozona", "tipo_cirugia"]
+        )
+        tabla_cirugia_macro = (
+            tabla_cirugia_region.groupby(
+                ["anio", "tipo_cirugia", "macrozona"], as_index=False
+            )["cantidad_total"]
+            .sum()
+        )
+    else:
+        anios_respaldo = list(range(2015, 2026))
+        valores_respaldo_cirugia = {
+            ("Mastectomía Parcial", "Región Metropolitana"): [1102, 1356, 1395, 1538, 1708, 1254, 1436, 1748, 2078, 2039, 2104],
+            ("Mastectomía Parcial", "Macrozona Sur"): [804, 897, 1030, 1011, 1111, 787, 917, 1152, 1311, 1154, 1427],
+            ("Mastectomía Parcial", "Macrozona Centro (sin RM)"): [447, 531, 471, 539, 627, 559, 495, 684, 704, 827, 853],
+            ("Mastectomía Parcial", "Macrozona Norte"): [207, 192, 261, 315, 453, 340, 498, 476, 645, 737, 769],
+            ("Mastectomía Parcial", "Macrozona Austral"): [31, 42, 68, 90, 93, 70, 73, 126, 159, 144, 161],
+            ("Mastectomía Radical", "Región Metropolitana"): [1185, 1135, 1282, 1233, 1148, 962, 1144, 1487, 1478, 1353, 1306],
+            ("Mastectomía Radical", "Macrozona Sur"): [620, 568, 605, 739, 651, 553, 671, 766, 776, 787, 783],
+            ("Mastectomía Radical", "Macrozona Centro (sin RM)"): [654, 599, 580, 639, 695, 506, 465, 664, 818, 800, 849],
+            ("Mastectomía Radical", "Macrozona Norte"): [258, 245, 281, 288, 307, 219, 320, 360, 303, 297, 299],
+            ("Mastectomía Radical", "Macrozona Austral"): [26, 16, 26, 27, 36, 20, 19, 24, 23, 20, 25],
+        }
+        filas_respaldo = [
+            {
+                "anio": anio_valor,
+                "tipo_cirugia": nombre_tipo,
+                "macrozona": nombre_macrozona,
+                "cantidad_total": serie_valores[indice_anio],
+            }
+            for (nombre_tipo, nombre_macrozona), serie_valores in valores_respaldo_cirugia.items()
+            for indice_anio, anio_valor in enumerate(anios_respaldo)
+        ]
+        tabla_cirugia_macro = pd.DataFrame(filas_respaldo)
+
+    return tabla_cirugia_macro.sort_values(
+        ["anio", "tipo_cirugia", "macrozona"]
+    ).reset_index(drop=True)
+
+
 # ==============================================================================
 # CONSTRUCCION DE GRAFICOS INTERACTIVOS CON PLOTLY (DESIGN SYSTEM CLINICO LIMPIO)
 # ==============================================================================
@@ -898,11 +1068,22 @@ def crear_grafico_tamizaje_mensual(tabla_mensual_mama):
     minimo_abril_2020 = int(
         tabla_mensual_mama.loc["2020-04-01", "mamografia_informada_aps"]
     )
+    fechas_texto_mensual = tabla_mensual_mama.index.strftime("%Y-%m-%d")
+    anios_serie = range(
+        int(tabla_mensual_mama.index.year.min()),
+        int(tabla_mensual_mama.index.year.max()) + 1,
+    )
+    fechas_separadoras_anio = [f"{anio_actual}-01-01" for anio_actual in anios_serie] + [
+        fechas_texto_mensual[-1]
+    ]
+    fechas_centradas_anio = [f"{anio_actual}-07-01" for anio_actual in anios_serie]
+    etiquetas_anios = [str(anio_actual) for anio_actual in anios_serie]
+
     figura_tamizaje = go.Figure()
 
     figura_tamizaje.add_trace(
         go.Scatter(
-            x=tabla_mensual_mama.index,
+            x=fechas_texto_mensual,
             y=tabla_mensual_mama["mamografia_informada_aps"],
             mode="lines+markers",
             name="Mamografías Informadas APS",
@@ -922,6 +1103,20 @@ def crear_grafico_tamizaje_mensual(tabla_mensual_mama):
         annotation_text="Cuarentenas COVID-19",
         annotation_position="top left",
     )
+
+    # Lineas verticales suaves al inicio de cada año y al cierre de la serie
+    for fecha_separador in fechas_separadoras_anio:
+        figura_tamizaje.add_shape(
+            type="line",
+            x0=fecha_separador,
+            x1=fecha_separador,
+            y0=0,
+            y1=1,
+            xref="x",
+            yref="paper",
+            layer="below",
+            line=dict(color="rgba(12, 35, 64, 0.16)", width=1, dash="dot"),
+        )
 
     figura_tamizaje.add_annotation(
         x="2020-04-01",
@@ -955,6 +1150,11 @@ def crear_grafico_tamizaje_mensual(tabla_mensual_mama):
         template=estilo["plantilla_plotly"],
         hovermode="x unified",
         xaxis=dict(
+            type="date",
+            range=[fechas_texto_mensual[0], fechas_texto_mensual[-1]],
+            tickvals=fechas_centradas_anio,
+            ticktext=etiquetas_anios,
+            showgrid=False,
             tickfont=dict(size=estilo["tamano_numeros_ejes"]),
             title_font=dict(size=estilo["tamano_ejes_grafico"]),
         ),
@@ -1053,43 +1253,51 @@ def crear_grafico_birads_anual(tabla_anual_mama):
     return figura_birads
 
 
-def crear_grafico_mastectomias_anual(tabla_anual_mama):
+def crear_grafico_indice_macrozona(tabla_anual_macro):
     estilo = CONFIGURACION_ESTILO
-    anios_mama = tabla_anual_mama.index
-    figura_mastectomias = go.Figure()
+    colores_macro = _colores_macrozonas()
+    figura_macrozona = go.Figure()
 
-    figura_mastectomias.add_trace(
-        go.Bar(
-            x=anios_mama,
-            y=tabla_anual_mama["mastectomia_parcial_conservadora"],
-            name="Parcial Conservadora (Temprana)",
-            marker=dict(
-                color=estilo["color_azul_clinico"],
-                cornerradius=8,
-            ),
+    for nombre_macrozona in ORDEN_MACROZONAS:
+        subconjunto_macro = tabla_anual_macro[
+            tabla_anual_macro["macrozona"] == nombre_macrozona
+        ].sort_values("anio")
+        volumenes_texto = [
+            f"{int(round(valor_real)):,}".replace(",", ".")
+            for valor_real in subconjunto_macro["cantidad_total"]
+        ]
+        figura_macrozona.add_trace(
+            go.Scatter(
+                x=subconjunto_macro["anio"],
+                y=subconjunto_macro["indice_base"].round(1),
+                mode="lines+markers",
+                name=nombre_macrozona,
+                customdata=volumenes_texto,
+                line=dict(color=colores_macro[nombre_macrozona], width=2.8),
+                marker=dict(size=6, color=colores_macro[nombre_macrozona]),
+                hovertemplate=(
+                    "%{y:.1f} pts (Volumen real: %{customdata} exámenes)<extra></extra>"
+                ),
+            )
         )
+
+    figura_macrozona.add_hline(
+        y=100,
+        line_dash="dot",
+        line_color=estilo["color_tinta"],
+        line_width=1.6,
+        annotation_text="Nivel prepandemia (2019 = 100)",
+        annotation_position="bottom right",
     )
 
-    figura_mastectomias.add_trace(
-        go.Bar(
-            x=anios_mama,
-            y=tabla_anual_mama["mastectomia_radical_tardia"],
-            name="Radical c/Vaciamiento (Tardía)",
-            marker=dict(
-                color=estilo["color_rosa_apagado"],
-                cornerradius=8,
-            ),
-        )
-    )
-
-    figura_mastectomias.update_layout(
-        barmode="group",
+    figura_macrozona.update_layout(
         title=dict(
-            text="Mastectomías Conservadoras frente a Radicales (2015-2025)",
+            text="Evolución Relativa del Tamizaje APS por Macrozona (Índice Base 2019 = 100)",
             font=dict(size=estilo["tamano_titulo_grafico"]),
         ),
         xaxis_title="Año",
-        yaxis_title="Intervenciones Quirúrgicas",
+        yaxis_title="Índice (Año 2019 = 100)",
+        yaxis_range=[0, float(tabla_anual_macro["indice_base"].max()) * 1.16],
         font=dict(
             family=estilo["familia_fuente"],
             size=estilo["tamano_ejes_grafico"],
@@ -1098,6 +1306,7 @@ def crear_grafico_mastectomias_anual(tabla_anual_mama):
         paper_bgcolor=estilo["color_fondo_tarjetas"],
         plot_bgcolor=estilo["color_fondo_tarjetas"],
         template=estilo["plantilla_plotly"],
+        hovermode="x unified",
         xaxis=dict(
             dtick=1,
             tickfont=dict(size=estilo["tamano_numeros_ejes"]),
@@ -1112,12 +1321,129 @@ def crear_grafico_mastectomias_anual(tabla_anual_mama):
             y=0.98,
             xanchor="left",
             x=0.02,
+            bgcolor="rgba(255, 255, 255, 0.85)",
             font=dict(size=estilo["tamano_leyenda_grafico"]),
         ),
         margin=dict(l=20, r=20, t=55, b=20),
         height=estilo["altura_grafico"],
     )
-    return figura_mastectomias
+    return figura_macrozona
+
+
+def crear_grafico_cirugia_macrozona(tabla_cirugia_macro):
+    estilo = CONFIGURACION_ESTILO
+    colores_macro = _colores_macrozonas()
+    tipos_cirugia_panel = ["Mastectomía Parcial", "Mastectomía Radical"]
+
+    totales_por_tipo_anio = (
+        tabla_cirugia_macro.groupby(["tipo_cirugia", "anio"])["cantidad_total"]
+        .sum()
+        .rename("total_anio_tipo")
+    )
+    tabla_con_total = tabla_cirugia_macro.merge(
+        totales_por_tipo_anio, on=["tipo_cirugia", "anio"], how="left"
+    )
+    maximo_eje_cirugia = float(totales_por_tipo_anio.max())
+
+    figura_cirugia_macro = make_subplots(
+        rows=1,
+        cols=2,
+        shared_yaxes=True,
+        horizontal_spacing=0.05,
+        subplot_titles=tuple(tipos_cirugia_panel),
+    )
+
+    for indice_panel, nombre_tipo_cirugia in enumerate(tipos_cirugia_panel, start=1):
+        subconjunto_tipo = tabla_con_total[
+            tabla_con_total["tipo_cirugia"] == nombre_tipo_cirugia
+        ]
+        for indice_macro, nombre_macrozona in enumerate(ORDEN_MACROZONAS):
+            subconjunto_barra = subconjunto_tipo[
+                subconjunto_tipo["macrozona"] == nombre_macrozona
+            ].sort_values("anio")
+
+            textos_detalle_hover = []
+            for cantidad_fila, total_fila in zip(
+                subconjunto_barra["cantidad_total"],
+                subconjunto_barra["total_anio_tipo"],
+            ):
+                porcentaje_fila = (cantidad_fila / total_fila) * 100 if total_fila else 0
+                cantidad_str = f"{int(round(cantidad_fila)):,}".replace(",", ".")
+                porcentaje_str = f"{porcentaje_fila:.1f}%".replace(".", ",")
+                textos_detalle_hover.append(f"{cantidad_str} ({porcentaje_str})")
+
+            propiedades_barra = dict(color=colores_macro[nombre_macrozona])
+            if indice_macro == len(ORDEN_MACROZONAS) - 1:
+                propiedades_barra["cornerradius"] = 6
+
+            figura_cirugia_macro.add_trace(
+                go.Bar(
+                    x=subconjunto_barra["anio"],
+                    y=subconjunto_barra["cantidad_total"],
+                    name=nombre_macrozona,
+                    legendgroup=nombre_macrozona,
+                    showlegend=(indice_panel == 1),
+                    marker=propiedades_barra,
+                    customdata=textos_detalle_hover,
+                    hovertemplate="%{customdata} cirugías<extra></extra>",
+                ),
+                row=1,
+                col=indice_panel,
+            )
+
+    figura_cirugia_macro.update_annotations(
+        font=dict(
+            family=estilo["familia_fuente"],
+            size=estilo["tamano_leyenda_grafico"],
+            color=estilo["color_tinta"],
+        )
+    )
+
+    figura_cirugia_macro.update_layout(
+        barmode="stack",
+        title=dict(
+            text="Evolución Quirúrgica por Macrozona: Parcial vs Radical (2015-2025)",
+            font=dict(size=estilo["tamano_titulo_grafico"]),
+        ),
+        font=dict(
+            family=estilo["familia_fuente"],
+            size=estilo["tamano_ejes_grafico"],
+            color=estilo["color_tinta"],
+        ),
+        paper_bgcolor=estilo["color_fondo_tarjetas"],
+        plot_bgcolor=estilo["color_fondo_tarjetas"],
+        template=estilo["plantilla_plotly"],
+        hovermode="x unified",
+        legend=dict(
+            yanchor="top",
+            y=0.97,
+            xanchor="left",
+            x=0.54,
+            bgcolor="rgba(255, 255, 255, 0.90)",
+            traceorder="reversed",
+            font=dict(size=estilo["tamano_leyenda_grafico"]),
+        ),
+        margin=dict(l=20, r=20, t=85, b=20),
+        height=estilo["altura_grafico"],
+    )
+
+    figura_cirugia_macro.update_xaxes(
+        title_text="Año",
+        dtick=1,
+        tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+        title_font=dict(size=estilo["tamano_ejes_grafico"]),
+    )
+    figura_cirugia_macro.update_yaxes(
+        range=[0, maximo_eje_cirugia * 1.18],
+        tickfont=dict(size=estilo["tamano_numeros_ejes"]),
+        title_font=dict(size=estilo["tamano_ejes_grafico"]),
+    )
+    figura_cirugia_macro.update_yaxes(
+        title_text="Intervenciones Quirúrgicas",
+        row=1,
+        col=1,
+    )
+    return figura_cirugia_macro
 
 
 def crear_grafico_indice_ruta_clinica(tabla_anual_mama):

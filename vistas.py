@@ -20,9 +20,12 @@ from funciones import (
     obtener_resumen_hojas_mamografia,
     cargar_datos_cancer_mama,
     cargar_datos_tamizaje_emp_50_59,
+    cargar_datos_tamizaje_macrozona,
+    cargar_datos_cirugia_macrozona,
     crear_grafico_tamizaje_mensual,
+    crear_grafico_indice_macrozona,
     crear_grafico_birads_anual,
-    crear_grafico_mastectomias_anual,
+    crear_grafico_cirugia_macrozona,
     crear_grafico_indice_ruta_clinica,
     crear_grafico_tasa_sospecha_birads,
     crear_grafico_estacionalidad_mensual,
@@ -443,13 +446,23 @@ def renderizar_pestana_analisis_mama():
         mostrar_bloque_grafico(
             titulo_grafico="Colapso del Tamizaje Preventivo en Cuarentenas (2020) y Evolución Reciente (2025)",
             descripcion_previa=(
-                f"Las mamografías informadas en APS cayeron a su mínimo histórico con {texto_minimo_abril} exámenes en abril de 2020, tomando más de 18 meses recuperar el nivel prepandemia. "
+                f"Las mamografías informadas en APS cayeron a su mínimo histórico con {texto_minimo_abril} exámenes en abril de 2020. "
                 f"Al extender la serie hasta **2025**, el registro en hoja A29 pasa de **{texto_tamizaje_2024}** en 2024 a **{texto_tamizaje_2025}** en 2025. "
             ),
             figura_plotly=crear_grafico_tamizaje_mensual(tabla_mensual_mama),
         )
 
-    columna_graf_birads, columna_graf_cirugia = st.columns(2, gap="medium")
+    tabla_tamizaje_macro = cargar_datos_tamizaje_macrozona()
+    mostrar_bloque_grafico(
+        titulo_grafico="Evolución Relativa por Macrozona (Índice Base 2019 = 100)",
+        descripcion_previa=(
+            "Para comparar zonas con distinta población sin que la Región Metropolitana tape al resto, cada año se divide por su nivel de **2019 (= 100)**. "
+            "Todas las macrozonas cayeron entre **51 y 67 puntos** en **2020** y luego superaron el nivel prepandemia, destacando el alza de la Macrozona Norte (**190 puntos** en 2023) y la Austral (**173** en 2021). Al pasar el cursor puedes ver el volumen real de exámenes de cada zona."
+        ),
+        figura_plotly=crear_grafico_indice_macrozona(tabla_tamizaje_macro),
+    )
+
+    columna_graf_birads, columna_graf_tasa = st.columns(2, gap="medium")
 
     with columna_graf_birads:
         mostrar_bloque_grafico(
@@ -460,25 +473,6 @@ def renderizar_pestana_analisis_mama():
             figura_plotly=crear_grafico_birads_anual(tabla_anual_mama),
         )
 
-    with columna_graf_cirugia:
-        mostrar_bloque_grafico(
-            titulo_grafico="Evolución Quirúrgica",
-            descripcion_previa=(
-                f"Las mastectomías radicales alcanzaron su máximo en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las cirugías parciales crecen hasta un nuevo máximo histórico en **2025** ({texto_parciales_2025} intervenciones)."
-            ),
-            figura_plotly=crear_grafico_mastectomias_anual(tabla_anual_mama),
-        )
-
-    mostrar_bloque_grafico(
-        titulo_grafico="Comparación Estandarizada de la Ruta Clínica (Índice Base 2019 = 100)",
-        descripcion_previa=(
-            "Normalizar cada etapa por su nivel de **2019 (= 100)** permite comparar en una misma escala. En **2020**, el tamizaje APS y las bilaterales cayeron cerca de **55 puntos**, mientras las cirugías descendieron menos (**75** parciales y **80** radicales) por priorización oncológica. Hacia **2024**, BI-RADS 4-5-6 llegó a **207 puntos** y en **2025** las bilaterales totales (167) y parciales (133) marcan nuevos máximos relativos."
-        ),
-        figura_plotly=crear_grafico_indice_ruta_clinica(tabla_anual_mama),
-    )
-
-    columna_graf_tasa, columna_graf_estacionalidad = st.columns(2, gap="medium")
-
     with columna_graf_tasa:
         mostrar_bloque_grafico(
             titulo_grafico="Tasa de Sospecha por 1.000 Mamografías Informadas",
@@ -488,16 +482,32 @@ def renderizar_pestana_analisis_mama():
             figura_plotly=crear_grafico_tasa_sospecha_birads(tabla_anual_mama),
         )
 
+    tabla_cirugia_macro = cargar_datos_cirugia_macrozona()
+    mostrar_bloque_grafico(
+        titulo_grafico="Evolución Quirúrgica por Macrozona: Parcial vs Radical",
+        descripcion_previa=(
+            f"A diferencia del gráfico estandarizado, aquí se muestran las **cantidades reales de cirugías** en barras apiladas para ver cuánto aporta cada macrozona. Las **mastectomías radicales** alcanzaron su máximo en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las **parciales** siguen creciendo hasta un máximo histórico en **2025** ({texto_parciales_2025} intervenciones), concentradas principalmente en la Región Metropolitana y la Macrozona Sur."
+        ),
+        figura_plotly=crear_grafico_cirugia_macrozona(tabla_cirugia_macro),
+    )
+
+    mostrar_bloque_grafico(
+        titulo_grafico="Comparación Estandarizada de la Ruta Clínica (Índice Base 2019 = 100)",
+        descripcion_previa=(
+            "Normalizar cada etapa por su nivel de **2019 (= 100)** permite comparar en una misma escala. En **2020**, el tamizaje APS y las bilaterales cayeron cerca de **55 puntos**, mientras las cirugías descendieron menos (**75** parciales y **80** radicales) por priorización oncológica. Hacia **2024**, BI-RADS 4-5-6 llegó a **207 puntos** y en **2025** las bilaterales totales (167) y parciales (133) marcan nuevos máximos relativos."
+        ),
+        figura_plotly=crear_grafico_indice_ruta_clinica(tabla_anual_mama),
+    )
+
     if tabla_mensual_mama is not None:
-        with columna_graf_estacionalidad:
-            mostrar_bloque_grafico(
-                titulo_grafico="Estacionalidad Mensual del Tamizaje en APS",
-                descripcion_previa=(
-                    "Comparación del promedio mensual entre prepandemia (**2015-2019**) y pospandemia (**2021-2025**), excluyendo 2020 por el quiebre sanitario. "
-                    "Tras los mínimos de enero y febrero, destaca un máximo recurrente en **agosto** asociado al corte de evaluación de metas en APS, seguido por la baja de septiembre y el cierre anual de noviembre-diciembre."
-                ),
-                figura_plotly=crear_grafico_estacionalidad_mensual(tabla_mensual_mama),
-            )
+        mostrar_bloque_grafico(
+            titulo_grafico="Estacionalidad Mensual del Tamizaje en APS",
+            descripcion_previa=(
+                "Comparación del promedio mensual entre prepandemia (**2015-2019**) y pospandemia (**2021-2025**), excluyendo 2020 por el quiebre sanitario. "
+                "Tras los mínimos de enero y febrero, destaca un máximo recurrente en **agosto** asociado al corte de evaluación de metas en APS, seguido por la baja de septiembre y el cierre anual de noviembre-diciembre."
+            ),
+            figura_plotly=crear_grafico_estacionalidad_mensual(tabla_mensual_mama),
+        )
 
     resumen_anual_emp = cargar_datos_tamizaje_emp_50_59()
 
