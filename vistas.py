@@ -341,12 +341,21 @@ display(catalogo_mamografias)"""
 def renderizar_pestana_analisis_mama():
     st.header("Retraso Diagnóstico y Quirúrgico (2015 - 2025)")
 
+    st.markdown(
+        """
+        <div class="tarjeta-bento tarjeta-superficie" style="margin-top: 0.75rem; margin-bottom: 1.5rem;">
+            <h3 style="margin-top: 0; margin-bottom: 8px;">Conclusiones principales</h3>
+            <ul style="margin-bottom: 0; padding-left: 20px;">
+                <li><strong>Caída del tamizaje en 2020:</strong> Las mamografías preventivas en APS descendieron bruscamente durante las restricciones de 2020 y se recuperaron gradualmente hasta alcanzar máximos en 2023–2024.</li>
+                <li><strong>Alza pospandemia en sospecha y cirugías:</strong> Desde 2021 se aprecia una tendencia creciente en hallazgos BI-RADS 4-5-6 y en intervenciones quirúrgicas (mastectomías parciales y radicales), debido aparentemente a la falta de mamografías oportunas durante la pandemia.</li>
+            </ul>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     tabla_mensual_mama, tabla_anual_mama = cargar_datos_cancer_mama()
     tabla_anual_vista = tabla_anual_mama.round(0).astype(int).reset_index()
-
-    with st.container(border=False):
-        st.subheader("Consolidación Histórica de Prestaciones Oncomamarias (2015 - 2025)")
-        mostrar_tabla_configurable(tabla_anual_vista, tipo_tabla="consolidacion")
 
     tamizaje_2024 = int(tabla_anual_mama.loc[2024, "mamografia_informada_aps"])
     tamizaje_2025 = int(tabla_anual_mama.loc[2025, "mamografia_informada_aps"])
@@ -444,3 +453,7 @@ def renderizar_pestana_analisis_mama():
         ),
         figura_plotly=crear_grafico_tamizaje_emp_50_59(resumen_anual_emp),
     )
+
+    with st.container(border=False):
+        st.subheader("Consolidación Histórica de Prestaciones Oncomamarias (2015 - 2025)")
+        mostrar_tabla_configurable(tabla_anual_vista, tipo_tabla="consolidacion")

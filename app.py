@@ -33,9 +33,9 @@ with st.sidebar:
     )
 
     opciones_menu = [
+        "Análisis e Impacto",
         "Tablas",
         "Exploración",
-        "Análisis e Impacto",
     ]
 
     seccion_seleccionada = st.radio(
@@ -59,9 +59,9 @@ st.markdown(
 )
 
 # Renderizado de la vista activa segun el menu lateral
-if seccion_seleccionada == "Tablas":
+if seccion_seleccionada == "Análisis e Impacto":
+    vistas.renderizar_pestana_analisis_mama()
+elif seccion_seleccionada == "Tablas":
     vistas.renderizar_pestana_tablas()
 elif seccion_seleccionada == "Exploración":
     vistas.renderizar_pestana_busqueda()
-elif seccion_seleccionada == "Análisis e Impacto":
-    vistas.renderizar_pestana_analisis_mama()
