@@ -193,7 +193,7 @@ CONFIGURACION_ESTILO = {
     "tamano_ejes_grafico": 24,
     "tamano_numeros_ejes": 14,
     "tamano_leyenda_grafico": 20,
-    "altura_grafico": 600,
+    "altura_grafico": 720,
 }
 
 

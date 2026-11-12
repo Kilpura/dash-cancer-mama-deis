@@ -329,6 +329,9 @@ def renderizar_pestana_busqueda():
                     <div class="birads-subtitulo">Malignidad confirmada.</div>
                 </div>
             </div>
+            <p style="margin-top: 12px; margin-bottom: 0; border-top: 1px solid #DBE8F3; padding-top: 10px;">
+                <strong>Alcance del registro:</strong> los resultados <strong>BI-RADS</strong> provienen solo de Atención Primaria (<code>BM18</code>, <code>BS17</code> y <code>A29</code>); no contemplan casos atendidos directamente en hospitales (<code>Hoja B</code>), donde las mamografías y cirugías se registran sin desglose BI-RADS.
+            </p>
         </div>
 
         <div class="tarjeta-bento tarjeta-rosa-alerta">
@@ -456,8 +459,8 @@ def renderizar_pestana_analisis_mama():
     mostrar_bloque_grafico(
         titulo_grafico="Evolución Relativa por Macrozona (Índice Base 2019 = 100)",
         descripcion_previa=(
-            "Para comparar zonas con distinta población sin que la Región Metropolitana tape al resto, cada año se divide por su nivel de **2019 (= 100)**. "
-            "Todas las macrozonas cayeron entre **51 y 67 puntos** en **2020** y luego superaron el nivel prepandemia, destacando el alza de la Macrozona Norte (**190 puntos** en 2023) y la Austral (**173** en 2021). Al pasar el cursor puedes ver el volumen real de exámenes de cada zona."
+            "Cada año se divide por su nivel de **2019 (= 100)**. "
+            "Todas las macrozonas cayeron entre **51 y 67 puntos** en **2020** y luego superaron el nivel prepandemia, destacando el alza de la Macrozona Norte (**190 puntos** en 2023) y la Austral (**173** en 2021)"
         ),
         figura_plotly=crear_grafico_indice_macrozona(tabla_tamizaje_macro),
     )
@@ -482,11 +485,27 @@ def renderizar_pestana_analisis_mama():
             figura_plotly=crear_grafico_tasa_sospecha_birads(tabla_anual_mama),
         )
 
+    st.markdown(
+        """
+        <div class="tarjeta-bento tarjeta-superficie" style="margin-top: 0.25rem; margin-bottom: 1.5rem;">
+            <div style="margin-bottom: 8px;">
+                <span class="pildora pildora-clinica">Nota metodológica sobre BI-RADS</span>
+            </div>
+            <p style="margin-bottom: 0;">
+                Los conteos y tasas de <strong>BI-RADS</strong> provienen exclusivamente del tamizaje en Atención Primaria BM18, BS17 y A29 y
+                <strong>no contemplan los casos diagnosticados o atendidos directamente en hospitales</strong>.
+                En el nivel hospitalario de la hoja B, las mamografías bilaterales/unilaterales y las mastectomías (parciales y radicales) se registran sin desglose por categoría BI-RADS, lo que explica que el volumen anual de cirugías supere al de hallazgos BI-RADS 4-5-6 registrados en APS.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     tabla_cirugia_macro = cargar_datos_cirugia_macrozona()
     mostrar_bloque_grafico(
         titulo_grafico="Evolución Quirúrgica por Macrozona: Parcial vs Radical",
         descripcion_previa=(
-            f"A diferencia del gráfico estandarizado, aquí se muestran las **cantidades reales de cirugías** en barras apiladas para ver cuánto aporta cada macrozona. Las **mastectomías radicales** alcanzaron su máximo en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las **parciales** siguen creciendo hasta un máximo histórico en **2025** ({texto_parciales_2025} intervenciones), concentradas principalmente en la Región Metropolitana y la Macrozona Sur."
+            f"Las **mastectomías radicales** alcanzaron su máximo en **2023** (3.398 cirugías) y se mantienen estables en **2024** (3.257) y **2025** ({texto_radicales_2025}), mientras las **parciales** siguen creciendo hasta un máximo histórico en **2025** ({texto_parciales_2025} intervenciones), concentradas principalmente en la Región Metropolitana y la Macrozona Sur."
         ),
         figura_plotly=crear_grafico_cirugia_macrozona(tabla_cirugia_macro),
     )
@@ -515,10 +534,9 @@ def renderizar_pestana_analisis_mama():
         titulo_grafico="Tamizaje Preventivo en Población Objetivo del EMP: Mujeres de 50 a 59 Años (2015 - 2025)",
         descripcion_previa=(
             "El **Examen de Medicina Preventiva (EMP)** garantiza mamografía gratuita para mujeres entre **50 y 59 años**, "
-            "tramo medido de manera estable desde 2015 hasta 2025 mediante las columnas **col04 (50-54 años)** y **col05 (55-59 años)** de BM18, BS17 y A29. "
             "Este grupo cayó de 171.426 en 2019 a 92.194 en 2020. "
             "En 2023 por la **Ley N° 21.551** elimina la orden médica, alcanzando un máximo histórico de **249.663 exámenes en 2024** "
-            "(210.371 en 2025 por el subregistro parcial en seis Servicios de Salud)."
+            "(210.371 en 2025 por el subregistro parcial en seis Servicios de Salud). El porcentaje muestra qué proporción del total de mamografías de todas las edades, corresponde al grupo de 50 a 59 años."
         ),
         figura_plotly=crear_grafico_tamizaje_emp_50_59(resumen_anual_emp),
     )
